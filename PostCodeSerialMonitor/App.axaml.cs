@@ -1,8 +1,7 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
 using PostCodeSerialMonitor.ViewModels;
 using PostCodeSerialMonitor.Views;
@@ -31,6 +30,10 @@ public partial class App : Application
         var services = collection.BuildServiceProvider();
 
         var mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
+
+        //@todo Load language setting in cofig.json.
+        //
+        //Assets.Resources.Culture = new CultureInfo("en-US");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--  
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ExpectedStringToken" xml:space="preserve">
+    <value>Expected a string token</value>
+    <comment>In Models/JsonConverters.cs file</comment>
+  </data>
+  <data name="FailedReadingString" xml:space="preserve">
+    <value>Failed reading field as string</value>
+    <comment>In Models/JsonConverters.cs file</comment>
+  </data>
+  <data name="InvalidBase64String" xml:space="preserve">
+    <value>Invalid base64-urlsafe string</value>
+    <comment>In Models/JsonConverters.cs file</comment>
+  </data>
+  <data name="ConfigurationSaved" xml:space="preserve">
+    <value>Configuration saved successfully</value>
+    <comment>In Services/ConfigurationService.cs</comment>
+  </data>
+  <data name="FailedSaveConfiguration" xml:space="preserve">
+    <value>Failed to save configuration</value>
+    <comment>In Services/ConfigurationService.cs</comment>
+  </data>
+  <data name="ConfigurationUpdated" xml:space="preserve">
+    <value>Configuration updated successfully</value>
+    <comment>In Services/ConfigurationService.cs</comment>
+  </data>
+  <data name="FailedUpdateConfiguration" xml:space="preserve">
+    <value>Failed to update configuration</value>
+    <comment>In Services/ConfigurationService.cs</comment>
+  </data>
+  <data name="MetaFileNotExist" xml:space="preserve">
+    <value>LoadMetaDefinitions: File {0} does not exist</value>
+    <comment>In Services/MetaDefinitionService.cs</comment>
+  </data>
+  <data name="UnexpectedMetaType" xml:space="preserve">
+    <value>LoadMetaDefinitions: Unexpected MetaType: {0}</value>
+    <comment>In Services/MetaDefinitionService.cs</comment>
+  </data>
+  <data name="MetaContent" xml:space="preserve">
+    <value>Meta content: {0}</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
+  <data name="FailedDownloadMetaEntry" xml:space="preserve">
+    <value>Failed to download MetaEntry {0}</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
+  <data name="FailedDeserializingMetaDefinition" xml:space="preserve">
+    <value>Failed deserializing MetaDefinition</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
+  <data name="FailedDownloadMetaDefinition" xml:space="preserve">
+    <value>Failed to download MetaDefinition from {0}</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
+  <data name="DecoderIgnoringLine" xml:space="preserve">
+    <value>Decoder: Ignoring line {0}</value>
+    <comment>In Services/SerialLineDecoder.cs</comment>
+  </data>
+  <data name="UemOsError" xml:space="preserve">
+    <value>UEM / OS Error</value>
+    <comment>In Services/SerialLineDecoder.cs</comment>
+  </data>
+  <data name="FailedEnterRepl" xml:space="preserve">
+    <value>Failed to enter REPL. Maybe you are using the wrong serial device?</value>
+    <comment>In Services/SerialService.cs</comment>
+  </data>
+  <data name="FailedFwVersion" xml:space="preserve">
+    <value>Failed to parse version information. Are you on FW v0.2.3 or greater?</value>
+    <comment>In Services/SerialService.cs</comment>
+  </data>
+  <data name="FailedParseConfig" xml:space="preserve">
+    <value>Failed to parse config information.</value>
+    <comment>In Services/SerialService.cs</comment>
+  </data>
+  <data name="FailedGetVersion" xml:space="preserve">
+    <value>Failed to get version reply!</value>
+    <comment>In Services/SerialService.cs</comment>
+  </data>
+  <data name="FailedGetState" xml:space="preserve">
+    <value>Failed to get config state!</value>
+    <comment>In Services/SerialService.cs</comment>
+  </data>
+  <data name="Unavailable" xml:space="preserve">
+    <value>Unavailable</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="ScanButtonText" xml:space="preserve">
+    <value>Press button to scan</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="NotConnected" xml:space="preserve">
+    <value>Not connected</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Never</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="NewMetadataAvailable" xml:space="preserve">
+    <value>A new metadata definition is available.</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="NewMetadataAvailableInformation" xml:space="preserve">
+    <value>This update contains the latest post codes and error definitions for your console. Would you like to update?</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedUpdateMetadata" xml:space="preserve">
+    <value>Failed to update metadata</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedUpdateMetadataMessageBoxError" xml:space="preserve">
+    <value>Failed to update metadata: {0}</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedLoadLocalMetadata" xml:space="preserve">
+    <value>Failed to load local metadata definition</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedLoadLocalMetadataMessageBoxWarning" xml:space="preserve">
+    <value>Failed to load local metadata definition. The application will continue without metadata.</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedLoadMetadata" xml:space="preserve">
+    <value>Failed to load metadata definitions</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedLoadLocalMetadataMessageBoxError" xml:space="preserve">
+    <value>Failed to load metadata definitions: {0}</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="SaveLogFiles" xml:space="preserve">
+    <value>Save Log File</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="LogFiles" xml:space="preserve">
+    <value>Log Files</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="ErrorSavingLogFile" xml:space="preserve">
+    <value>Error saving log file</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="ErrorSavingLogFileMessageBoxError" xml:space="preserve">
+    <value>Failed saving logfile: {0}</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="ErrorConection" xml:space="preserve">
+    <value>Connection error</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="ErrorConectionMessageBoxError" xml:space="preserve">
+    <value>Connection to serialport failed: {0}</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedGetMainWindow" xml:space="preserve">
+    <value>Failed to get MainWindow</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="FailedGetApplicationLifetime" xml:space="preserve">
+    <value>Failed to get ApplicationLifetime</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="LanguageSettings" xml:space="preserve">
+    <value>Language Settings</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="UpdateSettings" xml:space="preserve">
+    <value>Update Settings</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="CheckApplicationUpdates" xml:space="preserve">
+    <value>Check for application updates</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="ApplicationUpdateUrl" xml:space="preserve">
+    <value>Application update URL</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="CheckCodeUpdates" xml:space="preserve">
+    <value>Check for code updates</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="CodeMetaUrl" xml:space="preserve">
+    <value>Code meta definition URL</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="CheckFirmwareUpdates" xml:space="preserve">
+    <value>Check for firmware updates</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="FirmwareUpdateUrl" xml:space="preserve">
+    <value>Firmware update URL</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="XboxPostCodeSerialMonitor" xml:space="preserve">
+    <value>Xbox PostCode Serial Monitor</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="RefreshPorts" xml:space="preserve">
+    <value>Refresh Ports</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="SaveLog" xml:space="preserve">
+    <value>Save Log</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="AppVersion" xml:space="preserve">
+    <value>App Version:</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="VisitXboxResearch" xml:space="preserve">
+    <value>Visit XboxResearch.com</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="PicoFirmware" xml:space="preserve">
+    <value>Pico Firmware:</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="MetadataUpdate" xml:space="preserve">
+    <value>Metadata Update:</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="FailedOpenUrl" xml:space="preserve">
+    <value>Failed to open URL: {0}</value>
+    <comment>In Views/MainWindow.axaml.cs</comment>
+  </data>
+</root>

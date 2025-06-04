@@ -1,5 +1,3 @@
-using System;
-
 namespace PostCodeSerialMonitor.Models;
 
 public enum ConsoleType

@@ -3,43 +3,49 @@
         xmlns:vm="using:PostCodeSerialMonitor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="PostCodeSerialMonitor.Views.ConfigurationDialog"
         x:DataType="vm:ConfigurationDialogViewModel"
-        Title="Configuration"
+        Title="{x:Static assets:Resources.Configuration}"
         Width="400" Height="450"
         WindowStartupLocation="CenterOwner">
 
     <Grid RowDefinitions="*,Auto" Margin="10">
         <ScrollViewer Grid.Row="0">
             <StackPanel Spacing="10">
-                <TextBlock Text="Update Settings" FontWeight="Bold" Margin="0,0,0,5"/>
-                
-                <CheckBox Content="Check for application updates" 
+                <TextBlock Text="{x:Static assets:Resources.LanguageSettings}" FontWeight="Bold" Margin="0,0,0,5"/>
+                <ComboBox Width="150"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+
+                <TextBlock Text="{x:Static assets:Resources.UpdateSettings}" FontWeight="Bold" Margin="0,0,0,5"/>
+
+                <CheckBox Content="{x:Static assets:Resources.CheckApplicationUpdates}" 
                           IsChecked="{Binding CheckForAppUpdates}"/>
                 <TextBox Text="{Binding AppUpdateUrl}" 
-                         Watermark="Application update URL"
+                         Watermark="{x:Static assets:Resources.ApplicationUpdateUrl}"
                          IsEnabled="{Binding CheckForAppUpdates}"/>
                 
-                <CheckBox Content="Check for code updates" 
+                <CheckBox Content="{x:Static assets:Resources.CheckCodeUpdates}" 
                           IsChecked="{Binding CheckForCodeUpdates}"
                           Margin="0,10,0,0"/>
                 <TextBox Text="{Binding CodesMetaBaseUrl}" 
-                         Watermark="Code meta definition URL"
+                         Watermark="{x:Static assets:Resources.CodeMetaUrl}"
                          IsEnabled="{Binding CheckForCodeUpdates}"/>
                 
-                <CheckBox Content="Check for firmware updates" 
+                <CheckBox Content="{x:Static assets:Resources.CheckFirmwareUpdates}" 
                           IsChecked="{Binding CheckForFwUpdates}"
                           Margin="0,10,0,0"/>
                 <TextBox Text="{Binding FwUpdateUrl}" 
-                         Watermark="Firmware update URL"
+                         Watermark="{x:Static assets:Resources.FirmwareUpdateUrl}"
                          IsEnabled="{Binding CheckForFwUpdates}"/>
             </StackPanel>
         </ScrollViewer>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,10,0,0">
-            <Button Content="Cancel" Command="{Binding CancelCommand}" CommandParameter="{Binding $parent[Window]}"/>
-            <Button Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding $parent[Window]}"/>
+            <Button Content="{x:Static assets:Resources.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding $parent[Window]}"/>
+            <Button Content="{x:Static assets:Resources.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding $parent[Window]}"/>
         </StackPanel>
     </Grid>
-</Window> 
+</Window>

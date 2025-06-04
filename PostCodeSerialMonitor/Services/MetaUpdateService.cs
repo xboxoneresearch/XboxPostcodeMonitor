@@ -71,7 +71,7 @@ public class MetaUpdateService
             return;
 
         var metaContentStr = JsonSerializer.Serialize(metaContent, _jsonSerializeOptions);
-        _logger.LogDebug("Meta content: {MetaContent}", metaContentStr);
+        _logger.LogDebug(Assets.Resources.MetaContent, metaContentStr);
 
         // Ensure directory exists
         Directory.CreateDirectory(_localPath);
@@ -113,7 +113,7 @@ public class MetaUpdateService
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to download MetaEntry {FileUrl}", fileUrl);
+                _logger.LogError(ex, Assets.Resources.FailedDownloadMetaEntry, fileUrl);
             }
         }
     }
@@ -132,7 +132,7 @@ public class MetaUpdateService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed deserializing MetaDefinition");
+            _logger.LogError(ex, Assets.Resources.FailedDeserializingMetaDefinition);
             return null;
         }
     }
@@ -149,7 +149,7 @@ public class MetaUpdateService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to download MetaDefinition from {MetaJsonUrl}", Config.MetaJsonUrl);
+            _logger.LogError(ex, Assets.Resources.FailedDownloadMetaDefinition, Config.MetaJsonUrl);
             return null;
         }
     }

@@ -68,7 +68,7 @@ public class SerialService : IDisposable
         if (!success)
         {
             Disconnect();
-            throw new Exception("Failed to enter REPL. Maybe you are using the wrong serial device?");
+            throw new Exception(Assets.Resources.FailedEnterRepl);
         }
 
         // Get version info
@@ -78,8 +78,7 @@ public class SerialService : IDisposable
         if (!success)
         {
             Disconnect();
-            throw new Exception("Failed to parse version information. Are you on FW v0.2.3 or greater?");
-        }
+            throw new Exception(Assets.Resources.FailedFwVersion);}
 
         // Get config state
         _serialPort.WriteLine("config");
@@ -88,7 +87,7 @@ public class SerialService : IDisposable
         if (!success)
         {
             Disconnect();
-            throw new Exception("Failed to parse config information.");
+            throw new Exception(Assets.Resources.FailedParseConfig);
         }
 
         if (PrintColors)
@@ -127,7 +126,7 @@ public class SerialService : IDisposable
         var res = await ReadUntilEnd();
         if (!res.Contains("FW: "))
         {
-            _logger.LogError("Failed to get version reply!");
+            _logger.LogError(Assets.Resources.FailedGetVersion);
             return false;
         }
 
@@ -152,7 +151,7 @@ public class SerialService : IDisposable
         var res = await ReadUntilEnd();
         if (!res.Contains("Display mirrored:"))
         {
-            _logger.LogError("Failed to get config state!");
+            _logger.LogError(Assets.Resources.FailedGetState);
             return false;
         }
 

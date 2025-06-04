@@ -5,12 +5,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using PostCodeSerialMonitor.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System;
 using Microsoft.Extensions.Logging.Console;
-using System.IO;
 
 namespace PostCodeSerialMonitor;
 

@@ -36,11 +36,11 @@ public class ConfigurationService
             });
 
             await File.WriteAllTextAsync(_configFilePath, json);
-            _logger.LogInformation("Configuration saved successfully");
+            _logger.LogInformation(Assets.Resources.ConfigurationSaved);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to save configuration");
+            _logger.LogError(ex, Assets.Resources.FailedSaveConfiguration);
             throw;
         }
     }
@@ -52,11 +52,11 @@ public class ConfigurationService
             var config = _configurationMonitor.CurrentValue;
             updateAction(config);
             await SaveConfigurationAsync();
-            _logger.LogInformation("Configuration updated successfully");
+            _logger.LogInformation(Assets.Resources.ConfigurationUpdated);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update configuration");
+            _logger.LogError(ex, Assets.Resources.FailedUpdateConfiguration);
             throw;
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -43,7 +42,7 @@ public class MetaDefinitionService
             var filePath = Path.Combine(_configurationService.Config.MetaStoragePath, entry.Path);
             if (!File.Exists(filePath))
             {
-                _logger.LogError("LoadMetaDefinitions: File {filePath} does not exist", filePath);
+                _logger.LogError(Assets.Resources.MetaFileNotExist, filePath);
                 continue;
             }
 
@@ -61,7 +60,7 @@ public class MetaDefinitionService
                     _osErrors.AddRange(CsvParsingService.ParseOSErrors(content));
                     break;
                 default:
-                    _logger.LogError("LoadMetaDefinitions: Unexpected MetaType: {metaType}", entry.MetaType);
+                    _logger.LogError(Assets.Resources.UnexpectedMetaType, entry.MetaType);
                     break;
             }
         }

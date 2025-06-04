@@ -3,13 +3,14 @@
         xmlns:vm="using:PostCodeSerialMonitor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
         xmlns:converters="clr-namespace:PostCodeSerialMonitor.Views.Converters"
         xmlns:models="using:PostCodeSerialMonitor.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PostCodeSerialMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Xbox PostCode Serial Monitor"
+        Title="{x:Static assets:Resources.XboxPostCodeSerialMonitor}"
         SizeToContent="Width">
 
     <Window.Resources>
@@ -30,15 +31,15 @@
                       ItemsSource="{Binding SerialPorts}"
                       SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
                       IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="Refresh Ports" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="Connect" Command="{Binding ConnectCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="Disconnect" Command="{Binding DisconnectCommand}" IsEnabled="{Binding IsConnected}"/>
+            <Button Content="{x:Static assets:Resources.RefreshPorts}" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
+            <Button Content="{x:Static assets:Resources.Connect}" Command="{Binding ConnectCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
+            <Button Content="{x:Static assets:Resources.Disconnect}" Command="{Binding DisconnectCommand}" IsEnabled="{Binding IsConnected}"/>
             <ComboBox Width="150"
                       ItemsSource="{Binding ConsoleModels}"
                       SelectedItem="{Binding SelectedConsoleModel, Mode=TwoWay}"
                       IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"
                       Margin="20,0,0,0"/>
-            <Button Content="Save Log" 
+            <Button Content="{x:Static assets:Resources.SaveLog}"
                     Command="{Binding SaveLogCommand}"
                     Margin="20,0,0,0"/>
             <Button Command="{Binding ShowConfigurationCommand}" Margin="20,0,0,0">
@@ -60,7 +61,7 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="20">
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="Pico Firmware: " FontWeight="Bold"/>
+                        <TextBlock Text="{x:Static assets:Resources.PicoFirmware} " FontWeight="Bold"/>
                         <TextBlock>
                             <Run Text="{Binding FirmwareVersion}"/>
                             <Run Text=" "/>
@@ -68,11 +69,11 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="Metadata Update: " FontWeight="Bold"/>
+                        <TextBlock Text="{x:Static assets:Resources.MetadataUpdate} " FontWeight="Bold"/>
                         <TextBlock Text="{Binding MetadataLastUpdate}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="App Version: " FontWeight="Bold"/>
+                        <TextBlock Text="{x:Static assets:Resources.AppVersion} " FontWeight="Bold"/>
                         <TextBlock Text="{Binding AppVersion}"/>
                     </StackPanel>
                 </StackPanel>
@@ -81,7 +82,7 @@
                           Cursor="Hand"
                           TextDecorations="Underline"
                           Foreground="{DynamicResource SystemAccentColor}"
-                          Text="Visit XboxResearch.com"
+                          Text="{x:Static assets:Resources.VisitXboxResearch}"
                           PointerPressed="OnHyperlinkClick"/>
             </StackPanel>
         </Border>

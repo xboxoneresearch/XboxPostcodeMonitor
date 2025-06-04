@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,10 +11,10 @@ using Avalonia.Platform.Storage;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using PostCodeSerialMonitor.Views;
 using PostCodeSerialMonitor.Services;
 using PostCodeSerialMonitor.Models;
+
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
@@ -38,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<LogEntry> LogEntries { get; } = new();
     public ObservableCollection<string> RawLogEntries { get; } = new();
 
-    private string lastConnectedPicoFwVersion = "Unavailable";
+    private string lastConnectedPicoFwVersion = Assets.Resources.Unavailable;
 
     [ObservableProperty]
     private ConsoleType selectedConsoleModel;
@@ -62,16 +61,16 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool printTimestamps;
 
     [ObservableProperty]
-    private string i2cScanOutput = "Press button to scan";
+    private string i2cScanOutput = Assets.Resources.ScanButtonText;
 
     [ObservableProperty]
-    private string firmwareVersion = "Not connected";
+    private string firmwareVersion = Assets.Resources.NotConnected;
 
     [ObservableProperty]
     private string buildDate = string.Empty;
 
     [ObservableProperty]
-    private string metadataLastUpdate = "Never";
+    private string metadataLastUpdate = Assets.Resources.Never;
 
     [ObservableProperty]
     private string appVersion;
@@ -126,8 +125,8 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var box = MessageBoxManager
                 .GetMessageBoxStandard(
-                    "A new metadata definition is available.",
-                    "This update contains the latest post codes and error definitions for your console. Would you like to update?",
+                    Assets.Resources.NewMetadataAvailable,
+                    Assets.Resources.NewMetadataAvailableInformation,
                     ButtonEnum.YesNo
             );
 
@@ -141,24 +140,23 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Failed to update metadata");
+                    _logger.LogError(ex, Assets.Resources.FailedUpdateMetadata);
                     await MessageBoxManager
-                        .GetMessageBoxStandard("Error", $"Failed to update metadata: {ex.Message}",
-                            ButtonEnum.Ok)
+                        .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedUpdateMetadataMessageBoxError, ex.Message), ButtonEnum.Ok)
                         .ShowAsync();
                 }
             }
         }
 
         // Update the metadata last update timestamp
-        MetadataLastUpdate = _metaUpdateService.LastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss") ?? "Never";
+        MetadataLastUpdate = _metaUpdateService.LastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss") ?? Assets.Resources.Never;
 
         var success = await _metaUpdateService.TryLoadLocalDefinition();
         if (!success)
         {
-            _logger.LogWarning("Failed to load local metadata definition");
+            _logger.LogWarning(Assets.Resources.FailedLoadLocalMetadata);
             var box = MessageBoxManager
-                .GetMessageBoxStandard("Warning", "Failed to load local metadata definition. The application will continue without metadata.",
+                .GetMessageBoxStandard(Assets.Resources.Warning, Assets.Resources.FailedLoadLocalMetadataMessageBoxWarning,
                     ButtonEnum.Ok);
 
             await box.ShowAsync();
@@ -170,9 +168,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load metadata definitions");
+            _logger.LogError(ex, Assets.Resources.FailedLoadLocalMetadata);
             await MessageBoxManager
-                .GetMessageBoxStandard("Error", $"Failed to load metadata definitions: {ex.Message}",
+                .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedLoadLocalMetadataMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
                 .ShowAsync();
         }
@@ -189,12 +187,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var file = await _storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Save Log File",
+            Title = Assets.Resources.SaveLogFiles,
             DefaultExtension = "log",
             SuggestedFileName = defaultName,
             FileTypeChoices = new[]
             {
-                new FilePickerFileType("Log Files")
+                new FilePickerFileType(Assets.Resources.LogFiles)
                 {
                     Patterns = new[] { "*.log" }
                 }
@@ -235,9 +233,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error saving log file");
+            _logger.LogError(ex, Assets.Resources.ErrorSavingLogFile);
             await MessageBoxManager
-                .GetMessageBoxStandard("Error", $"Failed saving logfile: {ex.Message}",
+                .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorSavingLogFileMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
                 .ShowAsync();
         }
@@ -267,9 +265,9 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Connection error");
+                _logger.LogError(ex, Assets.Resources.ErrorConection);
                 await MessageBoxManager
-                    .GetMessageBoxStandard("Error", $"Connection to serialport failed: {ex.Message}",
+                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError,ex.Message),
                         ButtonEnum.Ok)
                     .ShowAsync();
             }
@@ -297,12 +295,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private void OnDisconnected()
     {
         IsConnected = false;
-        FirmwareVersion = "Not connected";
+        FirmwareVersion = Assets.Resources.NotConnected;
         BuildDate = string.Empty;
         MirrorDisplay = false;
         PortraitMode = false;
         PrintTimestamps = false;
-        I2cScanOutput = "Press button to scan";
+        I2cScanOutput = Assets.Resources.ScanButtonText;
         var prevSelectedPort = SelectedPort;
         RefreshPorts();
         if (prevSelectedPort != null && SerialPorts.Contains(prevSelectedPort)) {
@@ -339,8 +337,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private Window GetParentWindow()
     {
         if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop?.MainWindow ?? throw new Exception("Failed to get MainWindow");
+            return desktop?.MainWindow ?? throw new Exception(Assets.Resources.FailedGetMainWindow);
         else
-            throw new Exception("Failed to get ApplicationLifetime");
+            throw new Exception(Assets.Resources.FailedGetApplicationLifetime);
     }
 } 

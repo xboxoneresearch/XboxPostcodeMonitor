@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Linq;
 using PostCodeSerialMonitor.Models;
@@ -23,7 +22,7 @@ public class SerialLineDecoder
         var match = regex.Match(inputLine);
         if (!match.Success)
         {
-            _logger.LogDebug("Decoder: Ignoring line {inputLine}", inputLine);
+            _logger.LogDebug(Assets.Resources.DecoderIgnoringLine, inputLine);
             return null;
         }
 
@@ -55,7 +54,7 @@ public class SerialLineDecoder
         if (flavor == CodeFlavor.OS && index == 1) {
             decoded.SeverityLevel = CodeSeverity.Error;
             decoded.Name = $"OS_ERROR_E{code}";
-            decoded.Description = "UEM / OS Error";
+            decoded.Description = Assets.Resources.UemOsError;
             return decoded;
         }
 

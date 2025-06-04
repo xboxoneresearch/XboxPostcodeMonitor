@@ -3,7 +3,6 @@ using System.Buffers.Text;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
 namespace PostCodeSerialMonitor.Models;
 
 public class Base64UrlByteArrayConverter : JsonConverter<byte[]>
@@ -12,11 +11,11 @@ public class Base64UrlByteArrayConverter : JsonConverter<byte[]>
     {
         if (reader.TokenType != JsonTokenType.String)
         {
-            throw new JsonException("Expected a string token");
+            throw new JsonException(Assets.Resources.ExpectedStringToken);
         }
 
         string base64String = reader.GetString()
-            ?? throw new InvalidDataException("Failed reading field as string");
+            ?? throw new InvalidDataException(Assets.Resources.FailedReadingString);
         
 
         try
@@ -25,7 +24,7 @@ public class Base64UrlByteArrayConverter : JsonConverter<byte[]>
         }
         catch (FormatException ex)
         {
-            throw new JsonException("Invalid base64-urlsafe string", ex);
+            throw new JsonException(Assets.Resources.InvalidBase64String, ex);
         }
     }
 

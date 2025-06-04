@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PostCodeSerialMonitor.Models;
@@ -31,6 +32,11 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     [ObservableProperty]
     private string fwUpdateUrl;
 
+    public ObservableCollection<string> Languages { get; } = new();
+
+    [ObservableProperty]
+    private string selectedLanguage;
+
     public ConfigurationDialogViewModel(ConfigurationService configurationService)
     {
         _configurationService = configurationService;
@@ -43,6 +49,11 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         AppUpdateUrl = _originalConfiguration.AppUpdateUrl.ToString();
         CodesMetaBaseUrl = _originalConfiguration.CodesMetaBaseUrl.ToString();
         FwUpdateUrl = _originalConfiguration.FwUpdateUrl.ToString();
+        SelectedLanguage = _originalConfiguration.Language;
+
+        //Add available languages
+        Languages.Add("en-US");
+        Languages.Add("pt-BR");
     }
 
     [RelayCommand]
@@ -56,6 +67,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             config.AppUpdateUrl = new Uri(AppUpdateUrl);
             config.CodesMetaBaseUrl = new Uri(CodesMetaBaseUrl);
             config.FwUpdateUrl = new Uri(FwUpdateUrl);
+            config.Language = SelectedLanguage;
         });
 
         window.Close();

@@ -1,4 +1,3 @@
-using System;
 using CsvHelper.Configuration.Attributes;
 
 namespace PostCodeSerialMonitor.Models;

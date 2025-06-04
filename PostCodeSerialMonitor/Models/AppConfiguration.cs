@@ -25,6 +25,9 @@ public class AppConfiguration
     [Url]
     public Uri FwUpdateUrl { get; set; } = new Uri("https://example.com/todo");
 
+    [Required]
+    public string Language { get; set; } = "en-US";
+
     [NotMapped]
     public string MetaStoragePath => "meta";
 

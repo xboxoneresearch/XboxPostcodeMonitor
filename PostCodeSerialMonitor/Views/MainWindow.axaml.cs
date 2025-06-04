@@ -1,12 +1,8 @@
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using PostCodeSerialMonitor.ViewModels;
 using System.Diagnostics;
 using System;
-using Avalonia.Controls.Documents;
-using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
 
 namespace PostCodeSerialMonitor.Views;
 
@@ -92,7 +88,7 @@ public partial class MainWindow : Window
             catch (Exception ex)
             {
                 // Log the error or show a message to the user
-                Debug.WriteLine($"Failed to open URL: {ex.Message}");
+                Debug.WriteLine(string.Format(Assets.Resources.FailedOpenUrl, ex.Message));
             }
         }
     }
