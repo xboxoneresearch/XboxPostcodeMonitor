@@ -176,7 +176,25 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("FailedDownloadMetaDefinition", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   In Services/MetaUpdateService.cs
+        /// </summary>
+        public static string FailedDeserializingReleaseDefinition {
+            get {
+                return ResourceManager.GetString("FailedDeserializingReleaseDefinition", resourceCulture);
+            }
+        }
         
+        /// <summary>
+        ///   In Services/MetaUpdateService.cs
+        /// </summary>
+        public static string FailedDownloadReleaseDefinition {
+            get {
+                return ResourceManager.GetString("FailedDownloadReleaseDefinition", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   In Services/SerialLineDecoder.cs
         /// </summary>
@@ -302,7 +320,25 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("FailedUpdateMetadata", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   In ViewModels/MainWindowViewModel.cs
+        /// </summary>
+        public static string NewAppReleaseAvailable {
+            get {
+                return ResourceManager.GetString("NewAppReleaseAvailable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In ViewModels/MainWindowViewModel.cs
+        /// </summary>
+        public static string NewFirmwareReleaseAvailable {
+            get {
+                return ResourceManager.GetString("NewFirmwareReleaseAvailable", resourceCulture);
+            }
+        }
+                        
         /// <summary>
         ///   In ViewModels/MainWindowViewModel.cs
         /// </summary>

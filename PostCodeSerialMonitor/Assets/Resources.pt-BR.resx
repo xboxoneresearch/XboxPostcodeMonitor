@@ -169,6 +169,14 @@
     <value>Falha ao baixar MetaDefinition de {0}</value>
     <comment>In Services/MetaUpdateService.cs</comment>
   </data>
+  <data name="FailedDeserializingReleaseDefinition" xml:space="preserve">
+    <value>Falha ao deserializar ReleaseDefinition</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
+  <data name="FailedDownloadReleaseDefinition" xml:space="preserve">
+    <value>Falha ao baixar o último lançamento de {0}</value>
+    <comment>In Services/MetaUpdateService.cs</comment>
+  </data>
   <data name="DecoderIgnoringLine" xml:space="preserve">
     <value>Decodificador: Ignorando linha {0}</value>
     <comment>In Services/SerialLineDecoder.cs</comment>
@@ -223,6 +231,14 @@
   </data>
   <data name="FailedUpdateMetadata" xml:space="preserve">
     <value>Falha ao ataulizar o metadata</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="NewAppReleaseAvailable" xml:space="preserve">
+    <value>Uma nova versão do aplicativo está disponível em {0}.</value>
+    <comment>In ViewModels/MainWindowViewModel.cs</comment>
+  </data>
+  <data name="NewFirmwareReleaseAvailable" xml:space="preserve">
+    <value>Uma nova versão do firmware está disponível em {0}.</value>
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="Error" xml:space="preserve">

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using PostCodeSerialMonitor.Models;
 using Microsoft.Extensions.Logging;
 
 namespace PostCodeSerialMonitor.Services;
+
 public class MetaUpdateService
 {
     private readonly ConfigurationService _configurationService;
@@ -24,8 +26,8 @@ public class MetaUpdateService
     public AppConfiguration Config => _configurationService.Config;
 
     public MetaUpdateService(
-        ConfigurationService configurationService, 
-        JsonSerializerOptions jsonOptions, 
+        ConfigurationService configurationService,
+        JsonSerializerOptions jsonOptions,
         ILogger<MetaUpdateService> logger)
     {
         _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
@@ -34,6 +36,10 @@ public class MetaUpdateService
             ?? throw new ArgumentNullException(nameof(_configurationService.Config.MetaStoragePath));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _httpClient = new HttpClient();
+
+        //All GitHub's API requests must include a valid User-Agent header.
+        //@see https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "XboxPostcodeMonitor");
     }
 
     public async Task<bool> TryLoadLocalDefinition()
@@ -46,11 +52,29 @@ public class MetaUpdateService
         return true;
     }
 
+    public async Task<bool> CheckForAppUpdatesAsync(string currentVersion)
+    {
+        // Get the latest release from GitHub repo.
+        var remoteRelease = await GetRemoteAppReleaseAsync();
+        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
+
+        return string.Compare($"{remoteVersion}", $"{currentVersion}") > 0;
+    }
+
+    public async Task<bool> CheckForFirmwareUpdatesAsync(string currentVersion)
+    {
+        // Get the latest release from GitHub repo.
+        var remoteRelease = await GetRemoteFirmwareReleaseAsync();
+        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
+
+        return string.Compare($"{remoteVersion}", $"{currentVersion}") > 0;
+    }
+
     public async Task<bool> CheckForMetaDefinitionUpdatesAsync()
     {
         var localMeta = await GetLocalMetaDefinitionAsync();
         var remoteMeta = await GetRemoteMetaDefinitionAsync();
-        
+
         if (localMeta == null || remoteMeta == null)
         {
             // Update required
@@ -75,7 +99,7 @@ public class MetaUpdateService
 
         // Ensure directory exists
         Directory.CreateDirectory(_localPath);
-        
+
         // Save the new meta definition
         await File.WriteAllTextAsync(LocalMetaPath, metaContentStr);
 
@@ -143,13 +167,51 @@ public class MetaUpdateService
         {
             var response = await _httpClient.GetAsync(Config.MetaJsonUrl);
             response.EnsureSuccessStatusCode();
-            
+
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<MetaDefinition>(json, _jsonSerializeOptions);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, Assets.Resources.FailedDownloadMetaDefinition, Config.MetaJsonUrl);
+            return null;
+        }
+    }
+
+    private async Task<ReleaseDefinition?> GetRemoteAppReleaseAsync()
+    {
+        var gitHubApiReleasesLatest = new Uri("https://api.github.com/repos/xboxoneresearch/XboxPostcodeMonitor/releases/latest");
+
+        try
+        {
+            var response = await _httpClient.GetAsync(gitHubApiReleasesLatest);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ReleaseDefinition>(json, _jsonSerializeOptions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, Assets.Resources.FailedDownloadReleaseDefinition, gitHubApiReleasesLatest);
+            return null;
+        }
+    }
+
+    private async Task<ReleaseDefinition?> GetRemoteFirmwareReleaseAsync()
+    {
+        var gitHubApiReleasesLatest = new Uri("https://api.github.com/repos/xboxoneresearch/PicoDurangoPOST/releases/latest");
+
+        try
+        {
+            var response = await _httpClient.GetAsync(gitHubApiReleasesLatest);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ReleaseDefinition>(json, _jsonSerializeOptions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, Assets.Resources.FailedDownloadReleaseDefinition, gitHubApiReleasesLatest);
             return null;
         }
     }

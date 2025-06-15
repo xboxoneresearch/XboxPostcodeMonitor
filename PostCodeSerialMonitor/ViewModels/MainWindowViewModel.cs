@@ -174,6 +174,19 @@ public partial class MainWindowViewModel : ViewModelBase
                     ButtonEnum.Ok)
                 .ShowAsync();
         }
+
+        if (_configurationService.Config.CheckForAppUpdates)
+        {
+            updateAvailable = await _metaUpdateService.CheckForAppUpdatesAsync($"v{AppVersion}");
+            if (updateAvailable)
+            {
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard(Assets.Resources.Warning,
+                    string.Format(Assets.Resources.NewAppReleaseAvailable, "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"), ButtonEnum.Ok);
+
+                await box.ShowAsync();
+            }
+        }
     }
 
     [RelayCommand]
@@ -267,9 +280,22 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 _logger.LogError(ex, Assets.Resources.ErrorConection);
                 await MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError,ex.Message),
+                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
                         ButtonEnum.Ok)
                     .ShowAsync();
+            }
+
+            if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+            {
+                var updateAvailable = await _metaUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
+                if (updateAvailable)
+                {
+                    var box = MessageBoxManager
+                        .GetMessageBoxStandard(Assets.Resources.Warning,
+                        string.Format(Assets.Resources.NewFirmwareReleaseAvailable, "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"), ButtonEnum.Ok);
+
+                    await box.ShowAsync();
+                }
             }
         }
     }
