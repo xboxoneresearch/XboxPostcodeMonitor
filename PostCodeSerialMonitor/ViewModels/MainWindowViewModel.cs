@@ -200,6 +200,13 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void ClearLog()
+    {
+        LogEntries.Clear();
+        RawLogEntries.Clear();
+    }
+
+    [RelayCommand]
     private async Task SaveLogAsync()
     {
         if (_storageProvider == null)

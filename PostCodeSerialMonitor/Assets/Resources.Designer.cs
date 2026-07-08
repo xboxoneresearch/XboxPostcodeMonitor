@@ -619,6 +619,15 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("SaveLog", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml
+        /// </summary>
+        public static string ClearLog {
+            get {
+                return ResourceManager.GetString("ClearLog", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   In Views/MainWindow.axaml

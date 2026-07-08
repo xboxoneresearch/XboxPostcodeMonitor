@@ -365,6 +365,10 @@
     <value>Save Log</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
+  <data name="ClearLog" xml:space="preserve">
+    <value>Clear Log</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
   <data name="AppVersion" xml:space="preserve">
     <value>App Version:</value>
     <comment>In Views/MainWindow.axaml</comment>

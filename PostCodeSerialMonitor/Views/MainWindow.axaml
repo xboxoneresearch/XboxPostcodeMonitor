@@ -41,6 +41,8 @@
             <Button Content="{x:Static assets:Resources.SaveLog}"
                     Command="{Binding SaveLogCommand}"
                     Margin="20,0,0,0"/>
+            <Button Content="{x:Static assets:Resources.ClearLog}"
+                    Command="{Binding ClearLogCommand}"/>
             <Button Command="{Binding ShowConfigurationCommand}" Margin="20,0,0,0">
                 <PathIcon Data="{StaticResource settings_regular}"/>
             </Button>
