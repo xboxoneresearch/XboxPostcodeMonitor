@@ -21,8 +21,8 @@ public static partial class SerialPortRegex {
 public class SerialService : IDisposable
 {
     private readonly ILogger<SerialService> _logger;
-    private ISerialPort? _serialPort;
-    private CancellationTokenSource? _readCts;
+    internal ISerialPort? _serialPort;
+    internal CancellationTokenSource? _readCts;
     public event Action<string>? DataReceived;
     public event Action? Disconnected;
     public event Action? DeviceStateChanged;
@@ -280,7 +280,7 @@ public class SerialService : IDisposable
         PrintColors = false;
     }
 
-    private void ReadLoop(CancellationToken token)
+    internal void ReadLoop(CancellationToken token)
     {
         try
         {

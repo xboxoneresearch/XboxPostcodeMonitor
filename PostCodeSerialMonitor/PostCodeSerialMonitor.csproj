@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="PostCodeSerialMonitor.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Assets\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

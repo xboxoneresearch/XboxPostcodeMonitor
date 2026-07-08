@@ -2,8 +2,10 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using PostCodeSerialMonitor.Models;
+using PostCodeSerialMonitor.Services;
 using Xunit;
 
 namespace PostCodeSerialMonitor.Tests;
@@ -16,8 +18,9 @@ public class SerialServiceTests
 
     public SerialServiceTests()
     {
+        var logger = new Mock<ILogger<SerialService>>();
         _mockSerialPort = new Mock<ISerialPort>();
-        _serialService = new SerialService();
+        _serialService = new SerialService(logger.Object);
     }
 
     [Fact]
@@ -140,3 +143,48 @@ public class SerialServiceTests
     }
 }
 */
+
+public class SerialServiceDisconnectTests
+{
+    [Fact]
+    public async Task Disconnect_WhileReadLoopIsBlockedOnRead_FiresDisconnectedExactlyOnce()
+    {
+        // Arrange
+        var logger = new Mock<ILogger<SerialService>>();
+        var service = new SerialService(logger.Object);
+
+        var readerBlocked = new ManualResetEventSlim(false);   // ReadLoop has entered ReadChar()
+        var releaseReader = new ManualResetEventSlim(false);   // Close() happened, ReadChar() may throw
+
+        var mockPort = new Mock<ISerialPort>();
+        mockPort.SetupGet(p => p.IsOpen).Returns(true);
+        mockPort.Setup(p => p.ReadChar()).Returns(() =>
+        {
+            readerBlocked.Set();
+            releaseReader.Wait(TimeSpan.FromSeconds(5));
+            throw new IOException("Port closed while a read was pending");
+        });
+        mockPort.Setup(p => p.Close()).Callback(() => releaseReader.Set());
+
+        service._serialPort = mockPort.Object;
+        service._readCts = new CancellationTokenSource();
+
+        var disconnectedCount = 0;
+        service.Disconnected += () => Interlocked.Increment(ref disconnectedCount);
+
+        var readLoopTask = Task.Run(() => service.ReadLoop(service._readCts.Token));
+
+        // Ensure ReadLoop is genuinely blocked inside ReadChar() before disconnecting,
+        // to reproduce "close happens while a read is pending" deterministically.
+        Assert.True(readerBlocked.Wait(TimeSpan.FromSeconds(2)), "ReadLoop never reached ReadChar()");
+
+        // Act: single call, same as MainWindowViewModel.ToggleConnectionAsync does
+        service.Disconnect();
+
+        // Wait for the background ReadLoop thread's catch block to finish too.
+        await readLoopTask;
+
+        // Assert
+        Assert.Equal(1, disconnectedCount);
+    }
+}
