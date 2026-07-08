@@ -127,7 +127,34 @@ public partial class MainWindowViewModel : ViewModelBase
         _serialService.Disconnected += OnDisconnected;
         _serialService.DeviceStateChanged += OnDeviceStateChanged;
         _serialService.DeviceConfigChanged += OnDeviceConfigChanged;
+
+        if (false) {
+            // For debugging UI layout
+            PrefillDebugLogEntries();
+        }
     }
+
+    private void PrefillDebugLogEntries()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            LogEntries.Add(new LogEntry
+            {
+                DecodedCode = new DecodedCode
+                {
+                    Flavor = (CodeFlavor)(i % Enum.GetValues(typeof(CodeFlavor)).Length),
+                    Index = i,
+                    Code = i * 0x11,
+                    SeverityLevel = (CodeSeverity)(i % 3),
+                    Name = $"DEBUG_CODE_{i}",
+                    Description = i % 4 == 0
+                        ? $"This is a long debug description for entry {i}, used to verify that the log window wraps text correctly and fills the full width of the resized main window instead of being clipped at a fixed maximum width."
+                        : $"Debug entry {i}"
+                }
+            });
+        }
+    }
+
 
     private MessageBoxStandardParams MsgBoxHyperlink(string title, string text, string link)
     {
