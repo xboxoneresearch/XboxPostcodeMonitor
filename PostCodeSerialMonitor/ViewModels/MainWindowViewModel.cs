@@ -343,51 +343,50 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ToggleConnectionAsync()
     {
-        if (IsConnected)
+        if (SelectedPort == null)
         {
-            Disconnect();
             return;
         }
 
-        if (SelectedPort != null)
+        try
         {
-            try
+            if (IsConnected)
+            {
+                _serialService.Disconnect();
+                IsConnected = false;
+            }
+            else
             {
                 await _serialService.ConnectAsync(SelectedPort.Name);
-                RawLogEntries?.Clear();
-                LogEntries?.Clear();
                 IsConnected = true;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, Assets.Resources.ErrorConection);
-                await MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
-                        ButtonEnum.Ok)
-                    .ShowAsync();
-            }
 
-            if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+            RawLogEntries?.Clear();
+            LogEntries?.Clear();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, Assets.Resources.ErrorConection);
+            await MessageBoxManager
+                .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
+                    ButtonEnum.Ok)
+                .ShowAsync();
+        }
+
+        if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+        {
+            var updateAvailable = await _githubUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
+            if (updateAvailable)
             {
-                var updateAvailable = await _githubUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
-                if (updateAvailable)
-                {
-                    var box = MessageBoxManager
-                        .GetMessageBoxStandard(MsgBoxHyperlink(
-                            Assets.Resources.Warning,
-                            Assets.Resources.NewFirmwareReleaseAvailable,
-                            "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"
-                        ));
-                    await box.ShowAsync();
-                }
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard(MsgBoxHyperlink(
+                        Assets.Resources.Warning,
+                        Assets.Resources.NewFirmwareReleaseAvailable,
+                        "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"
+                    ));
+                await box.ShowAsync();
             }
         }
-    }
-
-    private void Disconnect()
-    {
-        _serialService.Disconnect();
-        IsConnected = false;
     }
 
     private void OnDataReceived(string line)
