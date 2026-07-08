@@ -34,7 +34,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private GithubUpdateService _githubUpdateService;
     private IStorageProvider? _storageProvider;
 
-    public ObservableCollection<PortInfo> SerialPorts { get; } = new();
+    public ObservableCollection<PortInfo> SerialPorts { get; set; } = new();
 
     public ObservableCollection<ConsoleType> ConsoleModels { get; } = new();
 
@@ -335,11 +335,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void RefreshPorts()
     {
-        SerialPorts.Clear();
-        foreach (var port in _serialService.GetPortInfos())
-            SerialPorts.Add(port);
-        if (SerialPorts.Count > 0 && SelectedPort == null)
-            SelectedPort = SerialPorts.FirstOrDefault();
+        var ports = _serialService.GetPortInfos();
+        SerialPorts = new(ports);
+        SelectedPort = SerialPorts?.FirstOrDefault();
     }
 
     [RelayCommand]
