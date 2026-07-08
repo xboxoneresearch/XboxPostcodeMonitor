@@ -32,8 +32,7 @@
                       SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
                       IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
             <Button Content="{x:Static assets:Resources.RefreshPorts}" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="{x:Static assets:Resources.Connect}" Command="{Binding ConnectCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="{x:Static assets:Resources.Disconnect}" Command="{Binding DisconnectCommand}" IsEnabled="{Binding IsConnected}"/>
+            <Button Content="{Binding ConnectionButtonText}" Command="{Binding ToggleConnectionCommand}" IsEnabled="{Binding CanToggleConnection}"/>
             <ComboBox Width="150"
                       ItemsSource="{Binding ConsoleModels}"
                       SelectedItem="{Binding SelectedConsoleModel, Mode=TwoWay}"

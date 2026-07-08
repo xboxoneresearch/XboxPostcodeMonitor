@@ -44,10 +44,17 @@ public partial class MainWindowViewModel : ViewModelBase
     private ConsoleType selectedConsoleModel;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
     private string? selectedPort;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
+    [NotifyPropertyChangedFor(nameof(ConnectionButtonText))]
     private bool isConnected;
+
+    public bool CanToggleConnection => IsConnected || SelectedPort != null;
+
+    public string ConnectionButtonText => IsConnected ? Assets.Resources.Disconnect : Assets.Resources.Connect;
 
     [ObservableProperty]
     private int selectedTabIndex;
@@ -268,8 +275,14 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task ConnectAsync()
+    private async Task ToggleConnectionAsync()
     {
+        if (IsConnected)
+        {
+            Disconnect();
+            return;
+        }
+
         if (SelectedPort != null)
         {
             try
@@ -303,7 +316,6 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand]
     private void Disconnect()
     {
         _serialService.Disconnect();
