@@ -8,31 +8,25 @@ public class AutoScrollTracker
     // from item virtualization/resizing so autoscroll doesn't flicker on/off during normal updates.
     private const double BottomThreshold = 4;
 
-    // Set right before we call ScrollToEnd() ourselves, so the ScrollChanged it triggers isn't
-    // mistaken for the user scrolling away (which happens if content keeps growing between our
-    // call and that event, leaving the offset behind a moving extent).
-    private bool _isProgrammaticScroll;
+    private double _lastOffsetY;
 
     public bool AutoScroll { get; private set; } = true;
 
-    public bool ShouldScrollToEnd()
-    {
-        if (!AutoScroll)
-            return false;
-
-        _isProgrammaticScroll = true;
-        return true;
-    }
-
     public void OnScrollChanged(double offsetY, double extentHeight, double viewportHeight)
     {
-        if (_isProgrammaticScroll)
+        if (offsetY < _lastOffsetY)
         {
-            _isProgrammaticScroll = false;
-            return;
+            // The offset moved backward. Our own auto-scroll (ScrollToEnd) never does that -
+            // it only ever moves forward, chasing a growing extent - so this can only be the
+            // user dragging the scrollbar up.
+            AutoScroll = false;
+        }
+        else if (offsetY >= extentHeight - viewportHeight - BottomThreshold)
+        {
+            AutoScroll = true;
         }
 
-        AutoScroll = offsetY >= extentHeight - viewportHeight - BottomThreshold;
+        _lastOffsetY = offsetY;
     }
 
     public void Reset()

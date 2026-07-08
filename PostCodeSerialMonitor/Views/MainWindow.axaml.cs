@@ -51,7 +51,7 @@ public partial class MainWindow : Window
 
     private void OnItemsRepeaterLayoutUpdated(object? sender, EventArgs e)
     {
-        if (_autoScroll.ShouldScrollToEnd() && _scrollViewer != null)
+        if (_autoScroll.AutoScroll && _scrollViewer != null)
         {
             _scrollViewer.ScrollToEnd();
         }
