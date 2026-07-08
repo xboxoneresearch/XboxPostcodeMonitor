@@ -30,7 +30,13 @@
             <ComboBox Width="180"
                       ItemsSource="{Binding SerialPorts}"
                       SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
-                      IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
+                      IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:PortInfo">
+                        <TextBlock Text="{Binding Name}" ToolTip.Tip="{Binding Description}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Button Content="{x:Static assets:Resources.RefreshPorts}" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
             <Button Content="{Binding ConnectionButtonText}" Command="{Binding ToggleConnectionCommand}" IsEnabled="{Binding CanToggleConnection}"/>
             <ComboBox Width="150"

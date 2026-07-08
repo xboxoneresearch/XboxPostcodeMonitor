@@ -2,11 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Management;
+using System.Runtime.Versioning;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
+using PostCodeSerialMonitor.Models;
 namespace PostCodeSerialMonitor.Services;
+
+public static partial class SerialPortRegex {
+    [GeneratedRegex(@"\(COM\d+\)$", RegexOptions.IgnoreCase)]
+    public static partial Regex Windows();
+}
+
 public class SerialService : IDisposable
 {
     private readonly ILogger<SerialService> _logger;
@@ -30,10 +39,46 @@ public class SerialService : IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public IEnumerable<string> GetPortNames()
+    public static IEnumerable<string> GetPortNames()
     {
         // Filtering for unique port names via hashset conversion
         return SerialPort.GetPortNames().ToHashSet();
+    }
+
+    public IEnumerable<PortInfo> GetPortInfos()
+    {
+        var descriptions = OperatingSystem.IsWindows()
+            ? GetWindowsPortDescriptions()
+            : [];
+
+        return GetPortNames().Select(name => new PortInfo(name, descriptions.GetValueOrDefault(name)));
+    }
+
+    [SupportedOSPlatform("windows")]
+    private Dictionary<string, string> GetWindowsPortDescriptions()
+    {
+        var result = new Dictionary<string, string>();
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(
+                "SELECT Name FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'");
+            foreach (ManagementBaseObject device in searcher.Get())
+            {
+                if (device["Name"] is not string name)
+                    continue;
+
+                var match = SerialPortRegex.Windows().Match(name);
+                if (!match.Success)
+                    continue;
+
+                result[match.Value.Trim('(', ')')] = name[..match.Index].Trim();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to query WMI for serial port descriptions");
+        }
+        return result;
     }
 
     public bool IsOpen => _serialPort?.IsOpen ?? false;
@@ -80,7 +125,8 @@ public class SerialService : IDisposable
         if (!success)
         {
             Disconnect();
-            throw new Exception(Assets.Resources.FailedFwVersion);}
+            throw new Exception(Assets.Resources.FailedFwVersion);
+        }
 
         // Get config state
         _serialPort.WriteLine("config");

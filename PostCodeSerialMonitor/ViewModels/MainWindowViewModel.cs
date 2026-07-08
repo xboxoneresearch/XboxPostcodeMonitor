@@ -33,7 +33,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private GithubUpdateService _githubUpdateService;
     private IStorageProvider? _storageProvider;
 
-    public ObservableCollection<string> SerialPorts { get; } = new();
+    public ObservableCollection<PortInfo> SerialPorts { get; } = new();
 
     public ObservableCollection<ConsoleType> ConsoleModels { get; } = new();
 
@@ -47,7 +47,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
-    private string? selectedPort;
+    private PortInfo? selectedPort;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
@@ -298,7 +298,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private void RefreshPorts()
     {
         SerialPorts.Clear();
-        foreach (var port in _serialService.GetPortNames())
+        foreach (var port in _serialService.GetPortInfos())
             SerialPorts.Add(port);
         if (SerialPorts.Count > 0 && SelectedPort == null)
             SelectedPort = SerialPorts.FirstOrDefault();
@@ -317,7 +317,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             try
             {
-                await _serialService.ConnectAsync(SelectedPort);
+                await _serialService.ConnectAsync(SelectedPort.Name);
                 RawLogEntries?.Clear();
                 LogEntries?.Clear();
                 IsConnected = true;
