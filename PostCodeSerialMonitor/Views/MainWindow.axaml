@@ -6,12 +6,12 @@
         xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
         xmlns:converters="clr-namespace:PostCodeSerialMonitor.Views.Converters"
         xmlns:models="using:PostCodeSerialMonitor.Models"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="900"
         x:Class="PostCodeSerialMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="{x:Static assets:Resources.XboxPostCodeSerialMonitor}"
-        SizeToContent="Width">
+        Width="850" Height="900">
 
     <Window.Resources>
         <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
@@ -78,18 +78,31 @@
                         <TextBlock Text="{Binding AppVersion}"/>
                     </StackPanel>
                 </StackPanel>
-                <TextBlock Margin="0,5,0,0" 
-                          Tag="https://xboxresearch.com"
-                          Cursor="Hand"
-                          TextDecorations="Underline"
-                          Foreground="{DynamicResource SystemAccentColor}"
-                          Text="{x:Static assets:Resources.VisitXboxResearch}"
-                          PointerPressed="OnHyperlinkClick"/>
+                <Grid DockPanel.Dock="Top" Margin="8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="0,5,0,0"
+                        Tag="https://xboxresearch.com"
+                        Cursor="Hand"
+                        TextDecorations="Underline"
+                        Foreground="{DynamicResource SystemAccentColor}"
+                        Text="{x:Static assets:Resources.VisitXboxResearch}"
+                        PointerPressed="OnHyperlinkClick"/>
+                    <TextBlock Grid.Column="1" Margin="0,5,0,0"
+                        Tag="https://ko-fi.com/tuxuser"
+                        Cursor="Hand"
+                        TextDecorations="Underline"
+                        Foreground="{DynamicResource SystemAccentColor}"
+                        Text="{x:Static assets:Resources.ConsiderDonation}"
+                        PointerPressed="OnHyperlinkClick"/>
+                </Grid>
             </StackPanel>
         </Border>
 
         <!-- Main monitor view -->
-        <Grid RowDefinitions="Auto,*" Margin="0,10,0,0" MaxWidth="800">
+        <Grid RowDefinitions="Auto,*" Margin="0,10,0,0">
             <StackPanel Grid.Row="0" x:Name="scrollViewer" Margin="0,0,0,5">
                 <TextBlock Text="Monitor" 
                           FontWeight="Bold"/>

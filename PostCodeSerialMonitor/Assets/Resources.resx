@@ -377,6 +377,10 @@
     <value>Visit XboxResearch.com</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
+  <data name="ConsiderDonation" xml:space="preserve">
+    <value>If you like, consider donating</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
   <data name="PicoFirmware" xml:space="preserve">
     <value>Pico Firmware:</value>
     <comment>In Views/MainWindow.axaml</comment>

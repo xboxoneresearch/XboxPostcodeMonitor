@@ -641,9 +641,20 @@ namespace PostCodeSerialMonitor.Assets {
         /// <summary>
         ///   In Views/MainWindow.axaml
         /// </summary>
-        public static string VisitXboxResearch {
-            get {
+        public static string VisitXboxResearch
+        {
+            get
+            {
                 return ResourceManager.GetString("VisitXboxResearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml
+        /// </summary>
+        public static string ConsiderDonation {
+            get {
+                return ResourceManager.GetString("ConsiderDonation", resourceCulture);
             }
         }
         
