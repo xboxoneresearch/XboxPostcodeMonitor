@@ -298,7 +298,8 @@ public class SerialService : IDisposable
         }
         catch (Exception)
         {
-            Disconnected?.Invoke();
+            if (!token.IsCancellationRequested)
+                Disconnected?.Invoke();
         }
     }
 
