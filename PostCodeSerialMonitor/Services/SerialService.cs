@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,8 @@ public class SerialService : IDisposable
 
     public IEnumerable<string> GetPortNames()
     {
-        return SerialPort.GetPortNames();
+        // Filtering for unique port names via hashset conversion
+        return SerialPort.GetPortNames().ToHashSet();
     }
 
     public bool IsOpen => _serialPort?.IsOpen ?? false;
