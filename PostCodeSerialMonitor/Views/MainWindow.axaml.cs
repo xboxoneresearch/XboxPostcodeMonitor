@@ -9,7 +9,7 @@ namespace PostCodeSerialMonitor.Views;
 
 public partial class MainWindow : Window
 {
-    private bool _autoScroll = true;
+    private readonly AutoScrollTracker _autoScroll = new();
     private ScrollViewer? _scrollViewer;
     private ItemsRepeater? _itemsRepeater;
 
@@ -38,25 +38,20 @@ public partial class MainWindow : Window
         }
     }
 
-    // Distance from the bottom (in pixels) still considered "at the bottom", to absorb layout jitter
-    // from item virtualization/resizing so autoscroll doesn't flicker on/off during normal updates.
-    private const double BottomThreshold = 4;
-
     private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
     {
         if (_scrollViewer == null) return;
 
-        var atBottom = _scrollViewer.Offset.Y >= _scrollViewer.Extent.Height - _scrollViewer.Viewport.Height - BottomThreshold;
-        _autoScroll = atBottom;
+        _autoScroll.OnScrollChanged(_scrollViewer.Offset.Y, _scrollViewer.Extent.Height, _scrollViewer.Viewport.Height);
         if (AutoScrollButton != null)
         {
-            AutoScrollButton.IsVisible = !atBottom;
+            AutoScrollButton.IsVisible = !_autoScroll.AutoScroll;
         }
     }
 
     private void OnItemsRepeaterLayoutUpdated(object? sender, EventArgs e)
     {
-        if (_autoScroll && _scrollViewer != null)
+        if (_autoScroll.ShouldScrollToEnd() && _scrollViewer != null)
         {
             _scrollViewer.ScrollToEnd();
         }
@@ -64,7 +59,7 @@ public partial class MainWindow : Window
 
     private void OnAutoScrollButtonClick(object? sender, RoutedEventArgs e)
     {
-        _autoScroll = true;
+        _autoScroll.Reset();
         if (AutoScrollButton != null)
         {
             AutoScrollButton.IsVisible = false;
