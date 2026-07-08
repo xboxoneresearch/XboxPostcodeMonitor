@@ -19,6 +19,7 @@ using PostCodeSerialMonitor.Utils;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Dto;
+using Avalonia.Media;
 
 namespace PostCodeSerialMonitor.ViewModels;
 
@@ -52,11 +53,17 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
     [NotifyPropertyChangedFor(nameof(ConnectionButtonText))]
+    [NotifyPropertyChangedFor(nameof(ConnectionButtonIcon))]
     private bool isConnected;
 
     public bool CanToggleConnection => IsConnected || SelectedPort != null;
 
     public string ConnectionButtonText => IsConnected ? Assets.Resources.Disconnect : Assets.Resources.Connect;
+    public StreamGeometry? ConnectionButtonIcon =>
+        Avalonia.Application.Current?.Resources.TryGetResource(
+            IsConnected ? "plug_disconnected_regular" : "play_regular", null, out var resource) == true
+            ? resource as StreamGeometry
+            : null;
 
     [ObservableProperty]
     private int selectedTabIndex;

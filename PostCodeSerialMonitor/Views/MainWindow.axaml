@@ -26,37 +26,73 @@
 
     <DockPanel Margin="10" LastChildFill="True">
         <!-- Top controls -->
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Spacing="8">
-            <ComboBox Width="180"
-                      ItemsSource="{Binding SerialPorts}"
-                      SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
-                      IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="models:PortInfo">
-                        <TextBlock Text="{Binding Name}" ToolTip.Tip="{Binding Description}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Content="{x:Static assets:Resources.RefreshPorts}" Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"/>
-            <Button Content="{Binding ConnectionButtonText}" Command="{Binding ToggleConnectionCommand}" IsEnabled="{Binding CanToggleConnection}"/>
-            <ComboBox Width="150"
-                      ItemsSource="{Binding ConsoleModels}"
-                      SelectedItem="{Binding SelectedConsoleModel, Mode=TwoWay}"
-                      IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"
-                      Margin="20,0,0,0"/>
-            <Button Content="{x:Static assets:Resources.SaveLog}"
-                    Command="{Binding SaveLogCommand}"
-                    Margin="20,0,0,0"/>
-            <Button Content="{x:Static assets:Resources.ClearLog}"
-                    Command="{Binding ClearLogCommand}"/>
-            <Button Command="{Binding ShowConfigurationCommand}" Margin="20,0,0,0">
-                <PathIcon Data="{StaticResource settings_regular}"/>
-            </Button>
-            <!-- Keeping it clean (for now?) by not showing Pico firmware options
-            <CheckBox Content="Mirror display" IsChecked="{Binding MirrorDisplay}" Margin="20,0,0,0" IsEnabled="false"/>
-            <CheckBox Content="Portrait mode" IsChecked="{Binding PortraitMode}" IsEnabled="false"/>
-            <CheckBox Content="Print timestamps" IsChecked="{Binding PrintTimestamps}" IsEnabled="false"/>
-            -->
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Spacing="8">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Spacing="8">
+                <ComboBox Width="180"
+                        ItemsSource="{Binding SerialPorts}"
+                        SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
+                        IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:PortInfo">
+                            <TextBlock Text="{Binding Name}" ToolTip.Tip="{Binding Description}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Command="{Binding RefreshPortsCommand}" IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{StaticResource arrow_sync_regular}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{x:Static assets:Resources.RefreshPorts}"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ToggleConnectionCommand}" IsEnabled="{Binding CanToggleConnection}">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{Binding ConnectionButtonIcon}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding ConnectionButtonText}"/>
+                    </StackPanel>
+                </Button>
+                <ComboBox Width="150"
+                        ItemsSource="{Binding ConsoleModels}"
+                        SelectedItem="{Binding SelectedConsoleModel, Mode=TwoWay}"
+                        IsEnabled="{Binding IsConnected, Converter={StaticResource BooleanNegationConverter}}"
+                        Margin="20,0,0,0"/>
+                <Button Command="{Binding ShowConfigurationCommand}" Margin="20,0,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{StaticResource settings_regular}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{x:Static assets:Resources.Configuration}"/>
+                    </StackPanel>
+                </Button>
+                <!-- Keeping it clean (for now?) by not showing Pico firmware options
+                <CheckBox Content="Mirror display" IsChecked="{Binding MirrorDisplay}" Margin="20,0,0,0" IsEnabled="false"/>
+                <CheckBox Content="Portrait mode" IsChecked="{Binding PortraitMode}" IsEnabled="false"/>
+                <CheckBox Content="Print timestamps" IsChecked="{Binding PrintTimestamps}" IsEnabled="false"/>
+                -->
+            </StackPanel>
+            <TextBlock Text="Logs" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Spacing="4">
+                <Button Margin="20,0,0,0"
+                        Command="{Binding SaveLogCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{StaticResource save_regular}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{x:Static assets:Resources.SaveLog}"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="20,0,0,0"
+                        Command="{Binding ClearLogCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{StaticResource erase_regular}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{x:Static assets:Resources.ClearLog}"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="20,0,0,0"
+                        x:Name="AutoScrollButton"
+                        IsVisible="False"
+                        Click="OnAutoScrollButtonClick">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <PathIcon Data="{StaticResource textbox_align_bottom_regular}" Margin="0,0,10,0"/>
+                        <TextBlock Text="Auto-scroll"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </StackPanel>
 
         <!-- Footer -->
@@ -153,18 +189,6 @@
                         </ItemsRepeater.ItemTemplate>
                     </ItemsRepeater>
                 </ScrollViewer>
-                <Button x:Name="AutoScrollButton"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Margin="0,10,10,0"
-                        Padding="8,4"
-                        IsVisible="False"
-                        Click="OnAutoScrollButtonClick">
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                        <PathIcon Data="{StaticResource textbox_align_bottom_regular}"/>
-                        <TextBlock Text="Auto-scroll"/>
-                    </StackPanel>
-                </Button>
             </Grid>
         </Grid>
     </DockPanel>
