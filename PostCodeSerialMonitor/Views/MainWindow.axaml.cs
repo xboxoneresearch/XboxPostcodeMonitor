@@ -38,18 +38,19 @@ public partial class MainWindow : Window
         }
     }
 
+    // Distance from the bottom (in pixels) still considered "at the bottom", to absorb layout jitter
+    // from item virtualization/resizing so autoscroll doesn't flicker on/off during normal updates.
+    private const double BottomThreshold = 4;
+
     private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
     {
         if (_scrollViewer == null) return;
 
-        // If user scrolls up, disable autoscroll and show the button
-        if (e.OffsetDelta.Y < 0)
+        var atBottom = _scrollViewer.Offset.Y >= _scrollViewer.Extent.Height - _scrollViewer.Viewport.Height - BottomThreshold;
+        _autoScroll = atBottom;
+        if (AutoScrollButton != null)
         {
-            _autoScroll = false;
-            if (AutoScrollButton != null)
-            {
-                AutoScrollButton.IsVisible = true;
-            }
+            AutoScrollButton.IsVisible = !atBottom;
         }
     }
 
