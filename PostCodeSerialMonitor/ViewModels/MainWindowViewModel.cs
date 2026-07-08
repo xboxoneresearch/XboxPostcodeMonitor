@@ -360,11 +360,9 @@ public partial class MainWindowViewModel : ViewModelBase
             else
             {
                 await _serialService.ConnectAsync(SelectedPort.Name);
+                ClearLog();
                 IsConnected = true;
             }
-
-            RawLogEntries?.Clear();
-            LogEntries?.Clear();
         }
         catch (Exception ex)
         {
