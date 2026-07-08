@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Management;
@@ -47,8 +49,8 @@ public class SerialService : IDisposable
 
     public IEnumerable<PortInfo> GetPortInfos()
     {
-        var descriptions = OperatingSystem.IsWindows()
-            ? GetWindowsPortDescriptions()
+        var descriptions = OperatingSystem.IsWindows() ? GetWindowsPortDescriptions()
+            : OperatingSystem.IsLinux() ? GetLinuxPortDescriptions()
             : [];
 
         return GetPortNames().Select(name => new PortInfo(name, descriptions.GetValueOrDefault(name)));
@@ -79,6 +81,49 @@ public class SerialService : IDisposable
             _logger.LogWarning(ex, "Failed to query WMI for serial port descriptions");
         }
         return result;
+    }
+
+    [SupportedOSPlatform("linux")]
+    private Dictionary<string, string> GetLinuxPortDescriptions()
+    {
+        var result = new Dictionary<string, string>();
+        try
+        {
+            foreach (var path in SerialPort.GetPortNames())
+            {
+                // Two hops: /sys/class/tty/{port} is itself a symlink, so its "device" symlink's
+                // relative target must be resolved against the already-resolved class directory.
+                var classDir = new DirectoryInfo($"/sys/class/tty/{Path.GetFileName(path)}")
+                    .ResolveLinkTarget(returnFinalTarget: true) as DirectoryInfo;
+                if (classDir == null)
+                    continue;
+
+                var dir = new DirectoryInfo(Path.Combine(classDir.FullName, "device"))
+                    .ResolveLinkTarget(returnFinalTarget: true) as DirectoryInfo;
+
+                for (var i = 0; i < 5 && dir != null; i++, dir = dir.Parent)
+                {
+                    var manufacturer = ReadSysfsAttribute(dir, "manufacturer");
+                    var product = ReadSysfsAttribute(dir, "product");
+                    if (manufacturer == null && product == null)
+                        continue;
+
+                    result[path] = string.Join(' ', new[] { manufacturer, product }.Where(s => !string.IsNullOrEmpty(s)));
+                    break;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to read sysfs for serial port descriptions");
+        }
+        return result;
+    }
+
+    private static string? ReadSysfsAttribute(DirectoryInfo dir, string name)
+    {
+        var path = Path.Combine(dir.FullName, name);
+        return File.Exists(path) ? File.ReadAllText(path).Trim() : null;
     }
 
     public bool IsOpen => _serialPort?.IsOpen ?? false;
