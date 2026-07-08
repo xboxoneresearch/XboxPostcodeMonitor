@@ -234,11 +234,11 @@
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="NewAppReleaseAvailable" xml:space="preserve">
-    <value>A new app release is available at {0}.</value>
+    <value>A new app release is available</value>
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="NewFirmwareReleaseAvailable" xml:space="preserve">
-    <value>A new firmware release is available at {0}.</value>
+    <value>A new firmware release is available</value>
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="Error" xml:space="preserve">

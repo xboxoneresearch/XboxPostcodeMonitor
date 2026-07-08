@@ -14,9 +14,11 @@ using CommunityToolkit.Mvvm.Input;
 using PostCodeSerialMonitor.Views;
 using PostCodeSerialMonitor.Services;
 using PostCodeSerialMonitor.Models;
+using PostCodeSerialMonitor.Utils;
 
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Dto;
 
 namespace PostCodeSerialMonitor.ViewModels;
 
@@ -127,6 +129,25 @@ public partial class MainWindowViewModel : ViewModelBase
         _serialService.DeviceConfigChanged += OnDeviceConfigChanged;
     }
 
+    private MessageBoxStandardParams MsgBoxHyperlink(string title, string text, string link)
+    {
+        return new MessageBoxStandardParams
+        {
+            ContentTitle = title,
+            ContentMessage = text,
+            ButtonDefinitions = ButtonEnum.Ok,
+            Icon = Icon.None,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            SizeToContent = SizeToContent.WidthAndHeight,
+            
+            HyperLinkParams = new HyperLinkParams
+            {
+                Text = link,
+                Action = new Action(() => GlobalActions.OpenHyperlinkAction(link)),
+            }
+        };
+    }
+
     // Executed by code behind view
     public async void OnLoaded()
     {
@@ -191,9 +212,11 @@ public partial class MainWindowViewModel : ViewModelBase
             if (updateAvailable)
             {
                 var box = MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Warning,
-                    string.Format(Assets.Resources.NewAppReleaseAvailable, "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"), ButtonEnum.Ok);
-
+                    .GetMessageBoxStandard(MsgBoxHyperlink(
+                        Assets.Resources.Warning,
+                        Assets.Resources.NewAppReleaseAvailable,
+                        "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"
+                    ));
                 await box.ShowAsync();
             }
         }
@@ -314,9 +337,11 @@ public partial class MainWindowViewModel : ViewModelBase
                 if (updateAvailable)
                 {
                     var box = MessageBoxManager
-                        .GetMessageBoxStandard(Assets.Resources.Warning,
-                        string.Format(Assets.Resources.NewFirmwareReleaseAvailable, "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"), ButtonEnum.Ok);
-
+                        .GetMessageBoxStandard(MsgBoxHyperlink(
+                            Assets.Resources.Warning,
+                            Assets.Resources.NewFirmwareReleaseAvailable,
+                            "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"
+                        ));
                     await box.ShowAsync();
                 }
             }

@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using PostCodeSerialMonitor.ViewModels;
 using System.Diagnostics;
 using System;
+using PostCodeSerialMonitor.Utils;
 
 namespace PostCodeSerialMonitor.Views;
 
@@ -79,11 +80,7 @@ public partial class MainWindow : Window
         {
             try
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                GlobalActions.OpenHyperlinkAction(url);
             }
             catch (Exception ex)
             {
