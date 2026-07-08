@@ -136,11 +136,14 @@ public partial class MainWindowViewModel : ViewModelBase
         _serialService.DeviceConfigChanged += OnDeviceConfigChanged;
 
         if (false) {
+#pragma warning disable CS0162 // Unreachable code
             // For debugging UI layout
             PrefillDebugLogEntries();
+#pragma warning restore CS0162 // Unreachable code
         }
     }
 
+#pragma warning disable CS0162 // Unreachable code
     private void PrefillDebugLogEntries()
     {
         for (int i = 0; i < 30; i++)
@@ -161,6 +164,7 @@ public partial class MainWindowViewModel : ViewModelBase
             });
         }
     }
+#pragma warning restore CS0162 // Unreachable code
 
 
     private MessageBoxStandardParams MsgBoxHyperlink(string title, string text, string link)
