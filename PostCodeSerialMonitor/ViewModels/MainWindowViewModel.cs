@@ -438,7 +438,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var dialog = new DebugDialog
         {
-            DataContext = new DebugDialogViewModel(LogEntries, _serialLineDecoder, ConsoleModels)
+            DataContext = new DebugDialogViewModel(RawLogEntries, LogEntries, _serialLineDecoder, ConsoleModels)
         };
 
         await dialog.ShowDialog(GetParentWindow());

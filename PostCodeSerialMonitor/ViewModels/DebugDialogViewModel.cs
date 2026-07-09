@@ -13,6 +13,7 @@ namespace PostCodeSerialMonitor.ViewModels;
 
 public partial class DebugDialogViewModel : ViewModelBase
 {
+    private readonly ObservableCollection<String> _rawLogEntries;
     private readonly ObservableCollection<LogEntry> _logEntries;
     private readonly SerialLineDecoder _serialLineDecoder;
 
@@ -35,10 +36,12 @@ public partial class DebugDialogViewModel : ViewModelBase
     private string decodedResultText = string.Empty;
 
     public DebugDialogViewModel(
+        ObservableCollection<String> rawLogEntries,
         ObservableCollection<LogEntry> logEntries,
         SerialLineDecoder serialLineDecoder,
         ObservableCollection<ConsoleType> consoleTypes)
     {
+        _rawLogEntries = rawLogEntries;
         _logEntries = logEntries;
         _serialLineDecoder = serialLineDecoder;
         ConsoleTypes = consoleTypes;
@@ -51,13 +54,19 @@ public partial class DebugDialogViewModel : ViewModelBase
     {
         for (int i = 0; i < (int)EntryCount; i++)
         {
+            var code = i * 0x11;
+            var segment = i % 4;
+            var flavor = CodeFlavors[i % CodeFlavors.Count];
+
+            var rawLine = $"{flavor.ToString().PadRight(4)} ({segment}) 0x{code:X4}\r\n";
+            _rawLogEntries.Add(rawLine);
             _logEntries.Add(new LogEntry
             {
                 DecodedCode = new DecodedCode
                 {
-                    Flavor = CodeFlavors[i % CodeFlavors.Count],
-                    Index = i,
-                    Code = i * 0x11,
+                    Flavor = flavor,
+                    Index = segment,
+                    Code = code,
                     SeverityLevel = (CodeSeverity)(i % 3),
                     Name = $"DEBUG_CODE_{i}",
                     Description = i % 4 == 0
