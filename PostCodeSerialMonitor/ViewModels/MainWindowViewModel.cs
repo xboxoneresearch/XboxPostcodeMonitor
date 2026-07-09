@@ -78,6 +78,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool printTimestamps;
 
     [ObservableProperty]
+    private bool showTimestamps;
+
+    [ObservableProperty]
     private string i2cScanOutput = Assets.Resources.ScanButtonText;
 
     [ObservableProperty]
@@ -128,6 +131,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         SelectedConsoleModel = ConsoleModels.FirstOrDefault();
+        ShowTimestamps = _configurationService.Config.ShowTimestamps;
 
         RefreshPorts();
         _serialService.DataReceived += OnDataReceived;
@@ -315,7 +319,7 @@ public partial class MainWindowViewModel : ViewModelBase
         sb.AppendLine("=== Decoded Log ===");
         foreach (var entry in LogEntries.Where(e => e.DecodedCode != null))
         {
-            sb.AppendLine(entry.FormattedText);
+            sb.AppendLine(entry.FormattedWithTs);
         }
 
         try
@@ -440,5 +444,7 @@ public partial class MainWindowViewModel : ViewModelBase
         };
 
         await dialog.ShowDialog(GetParentWindow());
+
+        ShowTimestamps = _configurationService.Config.ShowTimestamps;
     }
 } 

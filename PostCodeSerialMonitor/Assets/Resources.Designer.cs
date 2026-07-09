@@ -547,7 +547,25 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("CheckFirmwareUpdates", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string LogSettings {
+            get {
+                return ResourceManager.GetString("LogSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string ShowTimestamps {
+            get {
+                return ResourceManager.GetString("ShowTimestamps", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   In Views/MainWindow.axaml
         /// </summary>

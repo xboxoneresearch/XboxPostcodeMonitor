@@ -333,6 +333,14 @@
     <value>Check for firmware updates</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
   </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Log settings</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="ShowTimestamps" xml:space="preserve">
+    <value>Show timestamps</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
   <data name="FirmwareUpdateUrl" xml:space="preserve">
     <value>Firmware update URL</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>

@@ -160,7 +160,21 @@
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                <SelectableTextBlock Text="{Binding CodeText}" 
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                <SelectableTextBlock Text="{Binding TimestampText}"
+                                         IsVisible="{Binding $parent[ItemsRepeater].DataContext.ShowTimestamps}"
+                                         FontFamily="Consolas"
+                                         FontSize="16"
+                                         Padding="0"
+                                         Opacity="0.7"
+                                         VerticalAlignment="Top">
+                                    <SelectableTextBlock.Styles>
+                                        <Style Selector="SelectableTextBlock">
+                                            <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
+                                        </Style>
+                                    </SelectableTextBlock.Styles>
+                                </SelectableTextBlock>
+                                <SelectableTextBlock Text="{Binding CodeText}"
                                          FontFamily="Consolas"
                                          FontSize="16"
                                          Padding="0"
@@ -172,6 +186,7 @@
                                         </Style>
                                     </SelectableTextBlock.Styles>
                                 </SelectableTextBlock>
+                                </StackPanel>
                                 <SelectableTextBlock Text="{Binding Description}" 
                                          FontFamily="Consolas"
                                          Padding="0"

@@ -12,6 +12,7 @@ public class AppConfiguration
     public bool CheckForAppUpdates { get; set; } = true;
     public bool CheckForCodeUpdates { get; set; } = true;
     public bool CheckForFwUpdates { get; set; } = true;
+    public bool ShowTimestamps { get; set; } = false;
 
     [Required]
     [Url]

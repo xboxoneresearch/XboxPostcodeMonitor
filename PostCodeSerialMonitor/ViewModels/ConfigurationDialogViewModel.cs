@@ -29,6 +29,9 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     private bool checkForFwUpdates;
 
     [ObservableProperty]
+    private bool showTimestamps;
+
+    [ObservableProperty]
     private string codesMetaBaseUrl;
 
     [ObservableProperty]
@@ -55,6 +58,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         CheckForAppUpdates = _originalConfiguration.CheckForAppUpdates;
         CheckForCodeUpdates = _originalConfiguration.CheckForCodeUpdates;
         CheckForFwUpdates = _originalConfiguration.CheckForFwUpdates;
+        ShowTimestamps = _originalConfiguration.ShowTimestamps;
         CodesMetaBaseUrl = _originalConfiguration.CodesMetaBaseUrl.ToString();
         SelectedLanguage = _originalConfiguration.Language;
 
@@ -72,6 +76,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             config.CheckForAppUpdates = CheckForAppUpdates;
             config.CheckForCodeUpdates = CheckForCodeUpdates;
             config.CheckForFwUpdates = CheckForFwUpdates;
+            config.ShowTimestamps = ShowTimestamps;
             config.CodesMetaBaseUrl = new Uri(CodesMetaBaseUrl);
             config.Language = SelectedLanguage;
         });
