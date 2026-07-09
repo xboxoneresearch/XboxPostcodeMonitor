@@ -199,7 +199,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     ButtonEnum.YesNo
             );
 
-            var result = await box.ShowAsync();
+            var result = await box.ShowAsPopupAsync(GetParentWindow());
 
             if (result.HasFlag(ButtonResult.Yes))
             {
@@ -212,7 +212,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     _logger.LogError(ex, Assets.Resources.FailedUpdateMetadata);
                     await MessageBoxManager
                         .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedUpdateMetadataMessageBoxError, ex.Message), ButtonEnum.Ok)
-                        .ShowAsync();
+                        .ShowAsPopupAsync(GetParentWindow());
                 }
             }
         }
@@ -228,7 +228,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 .GetMessageBoxStandard(Assets.Resources.Warning, Assets.Resources.FailedLoadLocalMetadataMessageBoxWarning,
                     ButtonEnum.Ok);
 
-            await box.ShowAsync();
+            await box.ShowAsPopupAsync(GetParentWindow());
         }
 
         try
@@ -241,7 +241,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedLoadLocalMetadataMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
 
         if (_configurationService.Config.CheckForAppUpdates)
@@ -255,7 +255,7 @@ public partial class MainWindowViewModel : ViewModelBase
                         Assets.Resources.NewAppReleaseAvailable,
                         "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"
                     ));
-                await box.ShowAsync();
+                await box.ShowAsPopupAsync(GetParentWindow());
             }
         }
     }
@@ -328,7 +328,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorSavingLogFileMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
     }
 
@@ -370,7 +370,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
 
         if (IsConnected && _configurationService.Config.CheckForFwUpdates)
@@ -384,7 +384,7 @@ public partial class MainWindowViewModel : ViewModelBase
                         Assets.Resources.NewFirmwareReleaseAvailable,
                         "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"
                     ));
-                await box.ShowAsync();
+                await box.ShowAsPopupAsync(GetParentWindow());
             }
         }
     }
@@ -440,13 +440,5 @@ public partial class MainWindowViewModel : ViewModelBase
         };
 
         await dialog.ShowDialog(GetParentWindow());
-    }
-
-    private Window GetParentWindow()
-    {
-        if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop?.MainWindow ?? throw new Exception(Assets.Resources.FailedGetMainWindow);
-        else
-            throw new Exception(Assets.Resources.FailedGetApplicationLifetime);
     }
 } 

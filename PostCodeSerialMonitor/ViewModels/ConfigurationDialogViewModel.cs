@@ -82,7 +82,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.RestartRequired, string.Format(Assets.Resources.LanguageChangedPleaseRestart),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
     }
 
