@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PostCodeSerialMonitor.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="620"
+        x:Class="PostCodeSerialMonitor.Views.DebugDialog"
+        x:DataType="vm:DebugDialogViewModel"
+        Title="{x:Static assets:Resources.Debug}"
+        Width="480" Height="620"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid RowDefinitions="*,Auto" Margin="10">
+        <ScrollViewer Grid.Row="0">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{x:Static assets:Resources.FillDummyData}" FontWeight="Bold" Margin="0,0,0,5"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <NumericUpDown Value="{Binding EntryCount}" Minimum="1" Maximum="10000" Increment="1" Width="150"/>
+                    <Button Content="{x:Static assets:Resources.Fill}" Command="{Binding FillDummyDataCommand}"/>
+                </StackPanel>
+
+                <TextBlock Text="{x:Static assets:Resources.DecodeStandaloneCode}" FontWeight="Bold" Margin="0,10,0,5"/>
+                <TextBlock Text="{x:Static assets:Resources.ConsoleTypeLabel}"/>
+                <ComboBox ItemsSource="{Binding ConsoleTypes}" SelectedItem="{Binding SelectedConsoleType, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
+                <TextBox Text="{Binding CodeInput}" Watermark="0x0000"/>
+                <Button Content="{x:Static assets:Resources.Decode}" Command="{Binding DecodeStandaloneCommand}" HorizontalAlignment="Right"/>
+
+                <TextBlock Text="{x:Static assets:Resources.Result}" FontWeight="Bold" Margin="0,10,0,5"/>
+                <Border BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="1"
+                        Padding="8"
+                        MinHeight="80">
+                    <TextBlock Text="{Binding DecodedResultText}"
+                               FontFamily="Consolas"
+                               TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,10,0,0">
+            <Button Content="{x:Static assets:Resources.Close}" Command="{Binding CloseCommand}" CommandParameter="{Binding $parent[Window]}"/>
+        </StackPanel>
+    </Grid>
+</Window>

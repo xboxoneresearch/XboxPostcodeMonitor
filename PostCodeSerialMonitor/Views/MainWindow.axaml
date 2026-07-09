@@ -115,10 +115,16 @@
                         <TextBlock Text="{x:Static assets:Resources.MetadataUpdate} " FontWeight="Bold"/>
                         <TextBlock Text="{Binding MetadataLastUpdate}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="5">
+                    <StackPanel Orientation="Horizontal" Spacing="5"
+                                Background="Transparent"
+                                Cursor="Hand"
+                                PointerPressed="OnAppVersionPointerPressed">
                         <TextBlock Text="{x:Static assets:Resources.AppVersion} " FontWeight="Bold"/>
                         <TextBlock Text="{Binding AppVersion}"/>
                     </StackPanel>
+                    <Button Content="{x:Static assets:Resources.Debug}"
+                            Command="{Binding ShowDebugMenuCommand}"
+                            IsVisible="{Binding DebugModeUnlocked}"/>
                 </StackPanel>
                 <Grid DockPanel.Dock="Top" Margin="8,0">
                     <Grid.ColumnDefinitions>

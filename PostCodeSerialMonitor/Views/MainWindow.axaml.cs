@@ -70,6 +70,14 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnAppVersionPointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.AppVersionClickedCommand.Execute(null);
+        }
+    }
+
     private void OnHyperlinkClick(object sender, RoutedEventArgs e)
     {
         if (sender is TextBlock textBlock && textBlock.Tag is string url)

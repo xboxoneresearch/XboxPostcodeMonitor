@@ -95,6 +95,11 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string appVersion;
 
+    [ObservableProperty]
+    private bool debugModeUnlocked;
+
+    private int _appVersionClickCount;
+
     public IStorageProvider? StorageProvider
     {
         get => _storageProvider;
@@ -138,38 +143,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _serialService.Disconnected += OnDisconnected;
         _serialService.DeviceStateChanged += OnDeviceStateChanged;
         _serialService.DeviceConfigChanged += OnDeviceConfigChanged;
-
-        if (false) {
-#pragma warning disable CS0162 // Unreachable code
-            // For debugging UI layout
-            PrefillDebugLogEntries();
-#pragma warning restore CS0162 // Unreachable code
-        }
     }
-
-#pragma warning disable CS0162 // Unreachable code
-    private void PrefillDebugLogEntries()
-    {
-        for (int i = 0; i < 30; i++)
-        {
-            LogEntries.Add(new LogEntry
-            {
-                DecodedCode = new DecodedCode
-                {
-                    Flavor = (CodeFlavor)(i % Enum.GetValues(typeof(CodeFlavor)).Length),
-                    Index = i,
-                    Code = i * 0x11,
-                    SeverityLevel = (CodeSeverity)(i % 3),
-                    Name = $"DEBUG_CODE_{i}",
-                    Description = i % 4 == 0
-                        ? $"This is a long debug description for entry {i}, used to verify that the log window wraps text correctly and fills the full width of the resized main window instead of being clipped at a fixed maximum width."
-                        : $"Debug entry {i}"
-                }
-            });
-        }
-    }
-#pragma warning restore CS0162 // Unreachable code
-
 
     private MessageBoxStandardParams MsgBoxHyperlink(string title, string text, string link)
     {
@@ -446,5 +420,27 @@ public partial class MainWindowViewModel : ViewModelBase
         await dialog.ShowDialog(GetParentWindow());
 
         ShowTimestamps = _configurationService.Config.ShowTimestamps;
+    }
+
+    [RelayCommand]
+    private void AppVersionClicked()
+    {
+        if (DebugModeUnlocked)
+            return;
+
+        _appVersionClickCount++;
+        if (_appVersionClickCount >= 5)
+            DebugModeUnlocked = true;
+    }
+
+    [RelayCommand]
+    private async Task ShowDebugMenuAsync()
+    {
+        var dialog = new DebugDialog
+        {
+            DataContext = new DebugDialogViewModel(LogEntries, _serialLineDecoder, ConsoleModels)
+        };
+
+        await dialog.ShowDialog(GetParentWindow());
     }
 } 

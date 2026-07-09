@@ -381,6 +381,46 @@
     <value>Versão do App:</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
+  <data name="Debug" xml:space="preserve">
+    <value>Depuração</value>
+    <comment>In Views/MainWindow.axaml, Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="FillDummyData" xml:space="preserve">
+    <value>Preencher com dados fictícios</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Preencher</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="DecodeStandaloneCode" xml:space="preserve">
+    <value>Decodificar código avulso</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="CodeFlavorLabel" xml:space="preserve">
+    <value>Tipo de código</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="ConsoleTypeLabel" xml:space="preserve">
+    <value>Modelo do console</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Decode" xml:space="preserve">
+    <value>Decodificar</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Resultado</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="InvalidCodeFormatMessageBoxError" xml:space="preserve">
+    <value>Formato de código inválido: {0}</value>
+    <comment>In ViewModels/DebugDialogViewModel.cs</comment>
+  </data>
   <data name="VisitXboxResearch" xml:space="preserve">
     <value>Visite XboxResearch.com</value>
     <comment>In Views/MainWindow.axaml</comment>
