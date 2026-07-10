@@ -341,6 +341,10 @@
     <value>Mostrar timestamps</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
   </data>
+  <data name="TimestampLabel" xml:space="preserve">
+    <value>Hora: </value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
   <data name="FirmwareUpdateUrl" xml:space="preserve">
     <value>URL de atualização do firmware</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>

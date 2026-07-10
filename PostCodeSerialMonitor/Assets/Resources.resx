@@ -345,6 +345,14 @@
     <value>Show timestamps</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
   </data>
+  <data name="DescriptionDisplaySettings" xml:space="preserve">
+    <value>Description display</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="TimestampLabel" xml:space="preserve">
+    <value>Time: </value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
   <data name="FirmwareUpdateUrl" xml:space="preserve">
     <value>Firmware update URL</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>

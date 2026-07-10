@@ -5,19 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
         xmlns:converters="clr-namespace:PostCodeSerialMonitor.Views.Converters"
+        xmlns:objconv="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
         xmlns:models="using:PostCodeSerialMonitor.Models"
         mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="900"
         x:Class="PostCodeSerialMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="{x:Static assets:Resources.XboxPostCodeSerialMonitor}"
+        FontFamily="Consolas,Menlo,Monospace"
         Width="850" Height="900">
 
     <Window.Resources>
         <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converters:BooleanToTextConverter x:Key="BooleanToTextConverter" />
-        <converters:NullFontSizeConverter x:Key="NullFontSizeConverter"/>
     </Window.Resources>
+
+    <Window.Styles>
+        <!-- FluentTheme (via Avalonia.Fonts.Inter) sets FontFamily on TextBlock through a
+             Style setter, which outranks the value inherited from Window.FontFamily below. -->
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas,Menlo,Monospace"/>
+        </Style>
+        <Style Selector="Button.logRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4,1"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.logRow:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#20808080"/>
+        </Style>
+        <Style Selector="Button.logRow.selected /template/ ContentPresenter">
+            <Setter Property="Background">
+                <SolidColorBrush Color="{DynamicResource SystemAccentColor}" Opacity="0.25"/>
+            </Setter>
+        </Style>
+        <Style Selector="TextBlock.logText">
+            <Setter Property="Foreground" Value="{DynamicResource SeverityInfoBrush}" />
+        </Style>
+        <Style Selector="TextBlock.logText.severity-warning">
+            <Setter Property="Foreground" Value="{DynamicResource SeverityWarningBrush}" />
+        </Style>
+        <Style Selector="TextBlock.logText.severity-error">
+            <Setter Property="Foreground" Value="{DynamicResource SeverityErrorBrush}" />
+        </Style>
+    </Window.Styles>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -149,60 +183,140 @@
         </Border>
 
         <!-- Main monitor view -->
-        <Grid RowDefinitions="Auto,*" Margin="0,10,0,0">
+        <Grid RowDefinitions="Auto,*,Auto" Margin="0,10,0,0">
             <StackPanel Grid.Row="0" x:Name="scrollViewer" Margin="0,0,0,5">
-                <TextBlock Text="Monitor" 
+                <TextBlock Text="Monitor"
                           FontWeight="Bold"/>
-                <Border Height="2" 
+                <Border Height="1"
                         Background="{DynamicResource SystemAccentColor}"
                         Margin="0,2,0,0"/>
             </StackPanel>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" IsSharedSizeScope="True">
                 <ScrollViewer x:Name="LogScrollViewer"
                              HorizontalScrollBarVisibility="Disabled"
                              VerticalScrollBarVisibility="Auto">
                     <ItemsRepeater x:Name="LogItemsRepeater" ItemsSource="{Binding LogEntries}">
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                <SelectableTextBlock Text="{Binding TimestampText}"
-                                         Classes.severity-warning="{Binding IsWarning}"
-                                         Classes.severity-error="{Binding IsError}"
-                                         IsVisible="{Binding $parent[ItemsRepeater].DataContext.ShowTimestamps}"
-                                         FontFamily="Consolas"
-                                         FontSize="16"
-                                         Padding="0"
-                                         Opacity="0.7"
-                                         VerticalAlignment="Top"/>
-                                <SelectableTextBlock Text="{Binding CodeText}"
-                                         Classes.severity-warning="{Binding IsWarning}"
-                                         Classes.severity-error="{Binding IsError}"
-                                         FontFamily="Consolas"
-                                         FontSize="16"
-                                         Padding="0"
-                                         VerticalAlignment="Top"
-                                         TextWrapping="Wrap"/>
-                                </StackPanel>
-                                <SelectableTextBlock Text="{Binding Description}"
-                                         Classes.severity-warning="{Binding IsWarning}"
-                                         Classes.severity-error="{Binding IsError}"
-                                         FontFamily="Consolas"
-                                         Padding="0"
-                                         VerticalAlignment="Top"
-                                         TextWrapping="Wrap">
-                                    <SelectableTextBlock.Styles>
-                                        <Style Selector="SelectableTextBlock">
-                                            <Setter Property="FontSize" Value="{Binding Description, Converter={StaticResource NullFontSizeConverter}, ConverterParameter=14}"/>
-                                        </Style>
-                                    </SelectableTextBlock.Styles>
-                                </SelectableTextBlock>
-                                </StackPanel>
+                                <Button Classes="logRow"
+                                        Classes.selected="{Binding IsSelected}"
+                                        Command="{Binding $parent[ItemsRepeater].DataContext.SelectLogEntryCommand}"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="LogColTimestamp"/>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="LogColFlavor"/>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="LogColIndex"/>
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="LogColCode"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding TimestampText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     IsVisible="{Binding $parent[ItemsRepeater].DataContext.ShowTimestamps}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,0,4,0"
+                                                     Opacity="0.7"
+                                                     VerticalAlignment="Top"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding FlavorText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,0,4,0"
+                                                     VerticalAlignment="Top"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding IndexText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,0,4,0"
+                                                     VerticalAlignment="Top"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding CodeHexText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,0,4,0"
+                                                     VerticalAlignment="Top"/>
+                                            <!-- NewLine / bottom-panel mode: just the name -->
+                                            <TextBlock Grid.Column="4" Text="{Binding NameText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     IsVisible="{Binding $parent[ItemsRepeater].DataContext.IsDescriptionInlineMode, Converter={StaticResource BooleanNegationConverter}}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     VerticalAlignment="Top"
+                                                     TextWrapping="Wrap"/>
+                                            <!-- Inline mode: name + description, truncated with an ellipsis until expanded -->
+                                            <TextBlock Grid.Column="4" Text="{Binding InlinePreviewText}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     IsVisible="{Binding $parent[ItemsRepeater].DataContext.IsDescriptionInlineMode}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     VerticalAlignment="Top"
+                                                     TextWrapping="NoWrap"
+                                                     TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                        <!-- Inline mode, expanded: full (possibly multi-line) description -->
+                                        <StackPanel IsVisible="{Binding $parent[ItemsRepeater].DataContext.IsDescriptionInlineMode}">
+                                            <SelectableTextBlock Text="{Binding Description}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     IsVisible="{Binding IsSelected}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,2,0,2"
+                                                     TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                        <!-- New-line mode: description always shown on the next line -->
+                                        <StackPanel IsVisible="{Binding $parent[ItemsRepeater].DataContext.IsDescriptionNewLineMode}">
+                                            <SelectableTextBlock Text="{Binding Description}"
+                                                     Classes="logText"
+                                                     Classes.severity-warning="{Binding IsWarning}"
+                                                     Classes.severity-error="{Binding IsError}"
+                                                     IsVisible="{Binding HasDescription}"
+                                                     FontFamily="Consolas,Menlo,Monospace"
+                                                     FontSize="16"
+                                                     Margin="0,2,0,2"
+                                                     TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Button>
                             </DataTemplate>
                         </ItemsRepeater.ItemTemplate>
                     </ItemsRepeater>
                 </ScrollViewer>
             </Grid>
+
+            <!-- Description of the clicked log entry (bottom-panel mode only) -->
+            <StackPanel Grid.Row="2"
+                    IsVisible="{Binding IsDescriptionBottomPanelMode}">
+                <Border BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="0,1,0,0"
+                        Padding="0,8,0,0"
+                        Margin="0,8,0,0"
+                        IsVisible="{Binding SelectedLogEntry, Converter={x:Static objconv:ObjectConverters.IsNotNull}}">
+                    <StackPanel Spacing="4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static assets:Resources.TimestampLabel}" FontFamily="Consolas,Menlo,Monospace" Opacity="0.7"/>
+                            <SelectableTextBlock Text="{Binding SelectedLogEntry.TimestampText}" FontFamily="Consolas,Menlo,Monospace" Opacity="0.7"/>
+                        </StackPanel>
+                        <SelectableTextBlock Text="{Binding SelectedLogEntry.CodeText}" FontFamily="Consolas,Menlo,Monospace" FontWeight="Bold"/>
+                        <SelectableTextBlock Text="{Binding SelectedLogEntry.Description}" FontFamily="Consolas,Menlo,Monospace" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
         </Grid>
     </DockPanel>
 </Window>
