@@ -9,9 +9,9 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <!-- Versions are replaced in CI -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <Version>0.2.0</Version>
-    <AssemblyVersion>0.2.0.0</AssemblyVersion>
-    <FileVersion>0.2.0.0</FileVersion>
+    <Version>9.9.9</Version>
+    <AssemblyVersion>9.9.9.0</AssemblyVersion>
+    <FileVersion>9.9.9.0</FileVersion>
     <Company>XboxResearch</Company>
     <Product>PostCode Serial Monitor</Product>
     <Description>Serial monitor for Xbox POST codes</Description>
@@ -20,6 +20,10 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PostCodeSerialMonitor.Tests" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,5 +68,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.5" />
     <PackageReference Include="System.IO.Ports" Version="9.0.5" />
+    <PackageReference Include="System.Management" Version="9.0.5" />
   </ItemGroup>
 </Project>

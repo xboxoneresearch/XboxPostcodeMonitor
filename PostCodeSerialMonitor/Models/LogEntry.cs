@@ -6,7 +6,10 @@ public class LogEntry
 {
     public string RawText { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; } = DateTime.Now;
+    public string TimestampText => Timestamp.ToString("HH:mm:ss.fff");
     public required DecodedCode DecodedCode { get; set; }
+
+    public string FormattedWithTs => $"{TimestampText} {FormattedText}";
     // CodeText + Description
     public string FormattedText => FormatText();
     // Flavor, index and code (hex)

@@ -547,7 +547,25 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("CheckFirmwareUpdates", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string LogSettings {
+            get {
+                return ResourceManager.GetString("LogSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string ShowTimestamps {
+            get {
+                return ResourceManager.GetString("ShowTimestamps", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   In Views/MainWindow.axaml
         /// </summary>
@@ -619,6 +637,15 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("SaveLog", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml
+        /// </summary>
+        public static string ClearLog {
+            get {
+                return ResourceManager.GetString("ClearLog", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   In Views/MainWindow.axaml
@@ -628,13 +655,114 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("AppVersion", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml, Views/DebugDialog.axaml
+        /// </summary>
+        public static string Debug {
+            get {
+                return ResourceManager.GetString("Debug", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string FillDummyData {
+            get {
+                return ResourceManager.GetString("FillDummyData", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string Fill {
+            get {
+                return ResourceManager.GetString("Fill", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string DecodeStandaloneCode {
+            get {
+                return ResourceManager.GetString("DecodeStandaloneCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string CodeFlavorLabel {
+            get {
+                return ResourceManager.GetString("CodeFlavorLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string ConsoleTypeLabel {
+            get {
+                return ResourceManager.GetString("ConsoleTypeLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string Decode {
+            get {
+                return ResourceManager.GetString("Decode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string Result {
+            get {
+                return ResourceManager.GetString("Result", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/DebugDialog.axaml
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In ViewModels/DebugDialogViewModel.cs
+        /// </summary>
+        public static string InvalidCodeFormatMessageBoxError {
+            get {
+                return ResourceManager.GetString("InvalidCodeFormatMessageBoxError", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   In Views/MainWindow.axaml
         /// </summary>
-        public static string VisitXboxResearch {
-            get {
+        public static string VisitXboxResearch
+        {
+            get
+            {
                 return ResourceManager.GetString("VisitXboxResearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml
+        /// </summary>
+        public static string ConsiderDonation {
+            get {
+                return ResourceManager.GetString("ConsiderDonation", resourceCulture);
             }
         }
         

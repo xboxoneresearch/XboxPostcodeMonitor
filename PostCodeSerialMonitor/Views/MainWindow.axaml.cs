@@ -3,12 +3,13 @@ using Avalonia.Interactivity;
 using PostCodeSerialMonitor.ViewModels;
 using System.Diagnostics;
 using System;
+using PostCodeSerialMonitor.Utils;
 
 namespace PostCodeSerialMonitor.Views;
 
 public partial class MainWindow : Window
 {
-    private bool _autoScroll = true;
+    private readonly AutoScrollTracker _autoScroll = new();
     private ScrollViewer? _scrollViewer;
     private ItemsRepeater? _itemsRepeater;
 
@@ -41,20 +42,16 @@ public partial class MainWindow : Window
     {
         if (_scrollViewer == null) return;
 
-        // If user scrolls up, disable autoscroll and show the button
-        if (e.OffsetDelta.Y < 0)
+        _autoScroll.OnScrollChanged(_scrollViewer.Offset.Y, _scrollViewer.Extent.Height, _scrollViewer.Viewport.Height);
+        if (AutoScrollButton != null)
         {
-            _autoScroll = false;
-            if (AutoScrollButton != null)
-            {
-                AutoScrollButton.IsVisible = true;
-            }
+            AutoScrollButton.IsVisible = !_autoScroll.AutoScroll;
         }
     }
 
     private void OnItemsRepeaterLayoutUpdated(object? sender, EventArgs e)
     {
-        if (_autoScroll && _scrollViewer != null)
+        if (_autoScroll.AutoScroll && _scrollViewer != null)
         {
             _scrollViewer.ScrollToEnd();
         }
@@ -62,7 +59,7 @@ public partial class MainWindow : Window
 
     private void OnAutoScrollButtonClick(object? sender, RoutedEventArgs e)
     {
-        _autoScroll = true;
+        _autoScroll.Reset();
         if (AutoScrollButton != null)
         {
             AutoScrollButton.IsVisible = false;
@@ -73,17 +70,21 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnAppVersionPointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.AppVersionClickedCommand.Execute(null);
+        }
+    }
+
     private void OnHyperlinkClick(object sender, RoutedEventArgs e)
     {
         if (sender is TextBlock textBlock && textBlock.Tag is string url)
         {
             try
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                GlobalActions.OpenHyperlinkAction(url);
             }
             catch (Exception ex)
             {

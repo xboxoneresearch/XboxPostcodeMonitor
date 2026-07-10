@@ -234,11 +234,11 @@
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="NewAppReleaseAvailable" xml:space="preserve">
-    <value>A new app release is available at {0}.</value>
+    <value>A new app release is available</value>
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="NewFirmwareReleaseAvailable" xml:space="preserve">
-    <value>A new firmware release is available at {0}.</value>
+    <value>A new firmware release is available</value>
     <comment>In ViewModels/MainWindowViewModel.cs</comment>
   </data>
   <data name="Error" xml:space="preserve">
@@ -333,6 +333,14 @@
     <value>Check for firmware updates</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
   </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Log settings</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
+  <data name="ShowTimestamps" xml:space="preserve">
+    <value>Show timestamps</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
   <data name="FirmwareUpdateUrl" xml:space="preserve">
     <value>Firmware update URL</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
@@ -365,12 +373,60 @@
     <value>Save Log</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
+  <data name="ClearLog" xml:space="preserve">
+    <value>Clear Log</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
   <data name="AppVersion" xml:space="preserve">
     <value>App Version:</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
+  <data name="Debug" xml:space="preserve">
+    <value>Debug</value>
+    <comment>In Views/MainWindow.axaml, Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="FillDummyData" xml:space="preserve">
+    <value>Fill view with dummy data</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Fill</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="DecodeStandaloneCode" xml:space="preserve">
+    <value>Decode standalone code</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="CodeFlavorLabel" xml:space="preserve">
+    <value>Code flavor</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="ConsoleTypeLabel" xml:space="preserve">
+    <value>Console type</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Decode" xml:space="preserve">
+    <value>Decode</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Result</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>In Views/DebugDialog.axaml</comment>
+  </data>
+  <data name="InvalidCodeFormatMessageBoxError" xml:space="preserve">
+    <value>Invalid code format: {0}</value>
+    <comment>In ViewModels/DebugDialogViewModel.cs</comment>
+  </data>
   <data name="VisitXboxResearch" xml:space="preserve">
     <value>Visit XboxResearch.com</value>
+    <comment>In Views/MainWindow.axaml</comment>
+  </data>
+  <data name="ConsiderDonation" xml:space="preserve">
+    <value>If you like, consider donating</value>
     <comment>In Views/MainWindow.axaml</comment>
   </data>
   <data name="PicoFirmware" xml:space="preserve">

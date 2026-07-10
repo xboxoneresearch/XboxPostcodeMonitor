@@ -1,16 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.IO.Ports;
+using System.Linq;
+using System.Management;
+using System.Runtime.Versioning;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
+using PostCodeSerialMonitor.Models;
 namespace PostCodeSerialMonitor.Services;
+
+public static partial class SerialPortRegex {
+    [GeneratedRegex(@"\(COM\d+\)$", RegexOptions.IgnoreCase)]
+    public static partial Regex Windows();
+}
+
 public class SerialService : IDisposable
 {
     private readonly ILogger<SerialService> _logger;
-    private ISerialPort? _serialPort;
-    private CancellationTokenSource? _readCts;
+    internal ISerialPort? _serialPort;
+    internal CancellationTokenSource? _readCts;
     public event Action<string>? DataReceived;
     public event Action? Disconnected;
     public event Action? DeviceStateChanged;
@@ -29,9 +41,89 @@ public class SerialService : IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public IEnumerable<string> GetPortNames()
+    public static IEnumerable<string> GetPortNames()
     {
-        return SerialPort.GetPortNames();
+        // Filtering for unique port names via hashset conversion
+        return SerialPort.GetPortNames().ToHashSet();
+    }
+
+    public IEnumerable<PortInfo> GetPortInfos()
+    {
+        var descriptions = OperatingSystem.IsWindows() ? GetWindowsPortDescriptions()
+            : OperatingSystem.IsLinux() ? GetLinuxPortDescriptions()
+            : [];
+
+        return GetPortNames().Select(name => new PortInfo(name, descriptions.GetValueOrDefault(name)));
+    }
+
+    [SupportedOSPlatform("windows")]
+    private Dictionary<string, string> GetWindowsPortDescriptions()
+    {
+        var result = new Dictionary<string, string>();
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(
+                "SELECT Name FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'");
+            foreach (ManagementBaseObject device in searcher.Get())
+            {
+                if (device["Name"] is not string name)
+                    continue;
+
+                var match = SerialPortRegex.Windows().Match(name);
+                if (!match.Success)
+                    continue;
+
+                result[match.Value.Trim('(', ')')] = name[..match.Index].Trim();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to query WMI for serial port descriptions");
+        }
+        return result;
+    }
+
+    [SupportedOSPlatform("linux")]
+    private Dictionary<string, string> GetLinuxPortDescriptions()
+    {
+        var result = new Dictionary<string, string>();
+        try
+        {
+            foreach (var path in SerialPort.GetPortNames())
+            {
+                // Two hops: /sys/class/tty/{port} is itself a symlink, so its "device" symlink's
+                // relative target must be resolved against the already-resolved class directory.
+                var classDir = new DirectoryInfo($"/sys/class/tty/{Path.GetFileName(path)}")
+                    .ResolveLinkTarget(returnFinalTarget: true) as DirectoryInfo;
+                if (classDir == null)
+                    continue;
+
+                var dir = new DirectoryInfo(Path.Combine(classDir.FullName, "device"))
+                    .ResolveLinkTarget(returnFinalTarget: true) as DirectoryInfo;
+
+                for (var i = 0; i < 5 && dir != null; i++, dir = dir.Parent)
+                {
+                    var manufacturer = ReadSysfsAttribute(dir, "manufacturer");
+                    var product = ReadSysfsAttribute(dir, "product");
+                    if (manufacturer == null && product == null)
+                        continue;
+
+                    result[path] = string.Join(' ', new[] { manufacturer, product }.Where(s => !string.IsNullOrEmpty(s)));
+                    break;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to read sysfs for serial port descriptions");
+        }
+        return result;
+    }
+
+    private static string? ReadSysfsAttribute(DirectoryInfo dir, string name)
+    {
+        var path = Path.Combine(dir.FullName, name);
+        return File.Exists(path) ? File.ReadAllText(path).Trim() : null;
     }
 
     public bool IsOpen => _serialPort?.IsOpen ?? false;
@@ -78,7 +170,8 @@ public class SerialService : IDisposable
         if (!success)
         {
             Disconnect();
-            throw new Exception(Assets.Resources.FailedFwVersion);}
+            throw new Exception(Assets.Resources.FailedFwVersion);
+        }
 
         // Get config state
         _serialPort.WriteLine("config");
@@ -187,7 +280,7 @@ public class SerialService : IDisposable
         PrintColors = false;
     }
 
-    private void ReadLoop(CancellationToken token)
+    internal void ReadLoop(CancellationToken token)
     {
         try
         {
@@ -205,7 +298,8 @@ public class SerialService : IDisposable
         }
         catch (Exception)
         {
-            Disconnected?.Invoke();
+            if (!token.IsCancellationRequested)
+                Disconnected?.Invoke();
         }
     }
 

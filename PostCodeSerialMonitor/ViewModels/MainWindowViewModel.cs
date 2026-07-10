@@ -14,9 +14,12 @@ using CommunityToolkit.Mvvm.Input;
 using PostCodeSerialMonitor.Views;
 using PostCodeSerialMonitor.Services;
 using PostCodeSerialMonitor.Models;
+using PostCodeSerialMonitor.Utils;
 
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Dto;
+using Avalonia.Media;
 
 namespace PostCodeSerialMonitor.ViewModels;
 
@@ -31,7 +34,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private GithubUpdateService _githubUpdateService;
     private IStorageProvider? _storageProvider;
 
-    public ObservableCollection<string> SerialPorts { get; } = new();
+    public ObservableCollection<PortInfo> SerialPorts { get; } = new();
 
     public ObservableCollection<ConsoleType> ConsoleModels { get; } = new();
 
@@ -44,10 +47,23 @@ public partial class MainWindowViewModel : ViewModelBase
     private ConsoleType selectedConsoleModel;
 
     [ObservableProperty]
-    private string? selectedPort;
+    [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
+    private PortInfo? selectedPort;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanToggleConnection))]
+    [NotifyPropertyChangedFor(nameof(ConnectionButtonText))]
+    [NotifyPropertyChangedFor(nameof(ConnectionButtonIcon))]
     private bool isConnected;
+
+    public bool CanToggleConnection => IsConnected || SelectedPort != null;
+
+    public string ConnectionButtonText => IsConnected ? Assets.Resources.Disconnect : Assets.Resources.Connect;
+    public StreamGeometry? ConnectionButtonIcon =>
+        Avalonia.Application.Current?.Resources.TryGetResource(
+            IsConnected ? "plug_disconnected_regular" : "play_regular", null, out var resource) == true
+            ? resource as StreamGeometry
+            : null;
 
     [ObservableProperty]
     private int selectedTabIndex;
@@ -60,6 +76,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool printTimestamps;
+
+    [ObservableProperty]
+    private bool showTimestamps;
 
     [ObservableProperty]
     private string i2cScanOutput = Assets.Resources.ScanButtonText;
@@ -75,6 +94,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string appVersion;
+
+    [ObservableProperty]
+    private bool debugModeUnlocked;
+
+    private int _appVersionClickCount;
 
     public IStorageProvider? StorageProvider
     {
@@ -112,12 +136,32 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         SelectedConsoleModel = ConsoleModels.FirstOrDefault();
+        ShowTimestamps = _configurationService.Config.ShowTimestamps;
 
         RefreshPorts();
         _serialService.DataReceived += OnDataReceived;
         _serialService.Disconnected += OnDisconnected;
         _serialService.DeviceStateChanged += OnDeviceStateChanged;
         _serialService.DeviceConfigChanged += OnDeviceConfigChanged;
+    }
+
+    private MessageBoxStandardParams MsgBoxHyperlink(string title, string text, string link)
+    {
+        return new MessageBoxStandardParams
+        {
+            ContentTitle = title,
+            ContentMessage = text,
+            ButtonDefinitions = ButtonEnum.Ok,
+            Icon = Icon.None,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            SizeToContent = SizeToContent.WidthAndHeight,
+            
+            HyperLinkParams = new HyperLinkParams
+            {
+                Text = link,
+                Action = new Action(() => GlobalActions.OpenHyperlinkAction(link)),
+            }
+        };
     }
 
     // Executed by code behind view
@@ -133,7 +177,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     ButtonEnum.YesNo
             );
 
-            var result = await box.ShowAsync();
+            var result = await box.ShowAsPopupAsync(GetParentWindow());
 
             if (result.HasFlag(ButtonResult.Yes))
             {
@@ -146,7 +190,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     _logger.LogError(ex, Assets.Resources.FailedUpdateMetadata);
                     await MessageBoxManager
                         .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedUpdateMetadataMessageBoxError, ex.Message), ButtonEnum.Ok)
-                        .ShowAsync();
+                        .ShowAsPopupAsync(GetParentWindow());
                 }
             }
         }
@@ -162,7 +206,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 .GetMessageBoxStandard(Assets.Resources.Warning, Assets.Resources.FailedLoadLocalMetadataMessageBoxWarning,
                     ButtonEnum.Ok);
 
-            await box.ShowAsync();
+            await box.ShowAsPopupAsync(GetParentWindow());
         }
 
         try
@@ -175,7 +219,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedLoadLocalMetadataMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
 
         if (_configurationService.Config.CheckForAppUpdates)
@@ -184,12 +228,21 @@ public partial class MainWindowViewModel : ViewModelBase
             if (updateAvailable)
             {
                 var box = MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Warning,
-                    string.Format(Assets.Resources.NewAppReleaseAvailable, "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"), ButtonEnum.Ok);
-
-                await box.ShowAsync();
+                    .GetMessageBoxStandard(MsgBoxHyperlink(
+                        Assets.Resources.Warning,
+                        Assets.Resources.NewAppReleaseAvailable,
+                        "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"
+                    ));
+                await box.ShowAsPopupAsync(GetParentWindow());
             }
         }
+    }
+
+    [RelayCommand]
+    private void ClearLog()
+    {
+        LogEntries.Clear();
+        RawLogEntries.Clear();
     }
 
     [RelayCommand]
@@ -232,7 +285,7 @@ public partial class MainWindowViewModel : ViewModelBase
         sb.AppendLine("=== Raw Log ===");
         foreach (var entry in RawLogEntries)
         {
-            sb.AppendLine(entry);
+            sb.AppendLine(entry?.Trim());
         }
         sb.AppendLine();
 
@@ -240,7 +293,7 @@ public partial class MainWindowViewModel : ViewModelBase
         sb.AppendLine("=== Decoded Log ===");
         foreach (var entry in LogEntries.Where(e => e.DecodedCode != null))
         {
-            sb.AppendLine(entry.FormattedText);
+            sb.AppendLine(entry.FormattedWithTs);
         }
 
         try
@@ -253,7 +306,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await MessageBoxManager
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorSavingLogFileMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
-                .ShowAsync();
+                .ShowAsPopupAsync(GetParentWindow());
         }
     }
 
@@ -261,53 +314,57 @@ public partial class MainWindowViewModel : ViewModelBase
     private void RefreshPorts()
     {
         SerialPorts.Clear();
-        foreach (var port in _serialService.GetPortNames())
+        foreach (var port in _serialService.GetPortInfos())
             SerialPorts.Add(port);
         if (SerialPorts.Count > 0 && SelectedPort == null)
             SelectedPort = SerialPorts.FirstOrDefault();
     }
 
     [RelayCommand]
-    private async Task ConnectAsync()
+    private async Task ToggleConnectionAsync()
     {
-        if (SelectedPort != null)
+        if (SelectedPort == null)
         {
-            try
+            return;
+        }
+
+        try
+        {
+            if (IsConnected)
             {
-                await _serialService.ConnectAsync(SelectedPort);
-                RawLogEntries?.Clear();
-                LogEntries?.Clear();
+                _serialService.Disconnect();
+                IsConnected = false;
+            }
+            else
+            {
+                await _serialService.ConnectAsync(SelectedPort.Name);
+                ClearLog();
                 IsConnected = true;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, Assets.Resources.ErrorConection);
-                await MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
-                        ButtonEnum.Ok)
-                    .ShowAsync();
-            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, Assets.Resources.ErrorConection);
+            await MessageBoxManager
+                .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
+                    ButtonEnum.Ok)
+                .ShowAsPopupAsync(GetParentWindow());
+        }
 
-            if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+        if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+        {
+            var updateAvailable = await _githubUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
+            if (updateAvailable)
             {
-                var updateAvailable = await _githubUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
-                if (updateAvailable)
-                {
-                    var box = MessageBoxManager
-                        .GetMessageBoxStandard(Assets.Resources.Warning,
-                        string.Format(Assets.Resources.NewFirmwareReleaseAvailable, "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"), ButtonEnum.Ok);
-
-                    await box.ShowAsync();
-                }
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard(MsgBoxHyperlink(
+                        Assets.Resources.Warning,
+                        Assets.Resources.NewFirmwareReleaseAvailable,
+                        "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"
+                    ));
+                await box.ShowAsPopupAsync(GetParentWindow());
             }
         }
-    }
-
-    [RelayCommand]
-    private void Disconnect()
-    {
-        _serialService.Disconnect();
-        IsConnected = false;
     }
 
     private void OnDataReceived(string line)
@@ -361,13 +418,29 @@ public partial class MainWindowViewModel : ViewModelBase
         };
 
         await dialog.ShowDialog(GetParentWindow());
+
+        ShowTimestamps = _configurationService.Config.ShowTimestamps;
     }
 
-    private Window GetParentWindow()
+    [RelayCommand]
+    private void AppVersionClicked()
     {
-        if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop?.MainWindow ?? throw new Exception(Assets.Resources.FailedGetMainWindow);
-        else
-            throw new Exception(Assets.Resources.FailedGetApplicationLifetime);
+        if (DebugModeUnlocked)
+            return;
+
+        _appVersionClickCount++;
+        if (_appVersionClickCount >= 5)
+            DebugModeUnlocked = true;
+    }
+
+    [RelayCommand]
+    private async Task ShowDebugMenuAsync()
+    {
+        var dialog = new DebugDialog
+        {
+            DataContext = new DebugDialogViewModel(RawLogEntries, LogEntries, _serialLineDecoder, ConsoleModels)
+        };
+
+        await dialog.ShowDialog(GetParentWindow());
     }
 } 

@@ -31,9 +31,13 @@
                          Watermark="{x:Static assets:Resources.CodeMetaUrl}"
                          IsEnabled="{Binding CheckForCodeUpdates}"/>
                 
-                <CheckBox Content="{x:Static assets:Resources.CheckFirmwareUpdates}" 
+                <CheckBox Content="{x:Static assets:Resources.CheckFirmwareUpdates}"
                           IsChecked="{Binding CheckForFwUpdates}"
                           Margin="0,10,0,0"/>
+
+                <TextBlock Text="{x:Static assets:Resources.LogSettings}" FontWeight="Bold" Margin="0,10,0,5"/>
+                <CheckBox Content="{x:Static assets:Resources.ShowTimestamps}"
+                          IsChecked="{Binding ShowTimestamps}"/>
             </StackPanel>
         </ScrollViewer>
 
