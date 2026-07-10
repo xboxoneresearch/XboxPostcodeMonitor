@@ -81,6 +81,16 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool showTimestamps;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDescriptionInlineMode))]
+    [NotifyPropertyChangedFor(nameof(IsDescriptionNewLineMode))]
+    [NotifyPropertyChangedFor(nameof(IsDescriptionBottomPanelMode))]
+    private string descriptionDisplayMode = "NewLine";
+
+    public bool IsDescriptionInlineMode => DescriptionDisplayMode == "Inline";
+    public bool IsDescriptionNewLineMode => DescriptionDisplayMode == "NewLine";
+    public bool IsDescriptionBottomPanelMode => DescriptionDisplayMode == "BottomPanel";
+
+    [ObservableProperty]
     private string i2cScanOutput = Assets.Resources.ScanButtonText;
 
     [ObservableProperty]
@@ -97,6 +107,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool debugModeUnlocked;
+
+    [ObservableProperty]
+    private LogEntry? selectedLogEntry;
 
     private int _appVersionClickCount;
 
@@ -137,6 +150,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         SelectedConsoleModel = ConsoleModels.FirstOrDefault();
         ShowTimestamps = _configurationService.Config.ShowTimestamps;
+        DescriptionDisplayMode = _configurationService.Config.DescriptionDisplayMode;
 
         RefreshPorts();
         _serialService.DataReceived += OnDataReceived;
@@ -243,6 +257,24 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         LogEntries.Clear();
         RawLogEntries.Clear();
+        SelectedLogEntry = null;
+    }
+
+    [RelayCommand]
+    private void SelectLogEntry(LogEntry entry)
+    {
+        if (SelectedLogEntry == entry)
+        {
+            entry.IsSelected = false;
+            SelectedLogEntry = null;
+            return;
+        }
+
+        if (SelectedLogEntry != null)
+            SelectedLogEntry.IsSelected = false;
+
+        entry.IsSelected = true;
+        SelectedLogEntry = entry;
     }
 
     [RelayCommand]
@@ -420,6 +452,7 @@ public partial class MainWindowViewModel : ViewModelBase
         await dialog.ShowDialog(GetParentWindow());
 
         ShowTimestamps = _configurationService.Config.ShowTimestamps;
+        DescriptionDisplayMode = _configurationService.Config.DescriptionDisplayMode;
     }
 
     [RelayCommand]

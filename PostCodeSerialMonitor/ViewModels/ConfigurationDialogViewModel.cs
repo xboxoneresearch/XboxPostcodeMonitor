@@ -33,6 +33,12 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     private bool showTimestamps;
 
     [ObservableProperty]
+    private ObservableCollection<string> descriptionDisplayModes = new(["Inline", "NewLine", "BottomPanel"]);
+
+    [ObservableProperty]
+    private string selectedDescriptionDisplayMode;
+
+    [ObservableProperty]
     private string codesMetaBaseUrl;
 
     [ObservableProperty]
@@ -66,6 +72,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         CheckForCodeUpdates = _originalConfiguration.CheckForCodeUpdates;
         CheckForFwUpdates = _originalConfiguration.CheckForFwUpdates;
         ShowTimestamps = _originalConfiguration.ShowTimestamps;
+        SelectedDescriptionDisplayMode = _originalConfiguration.DescriptionDisplayMode;
         CodesMetaBaseUrl = _originalConfiguration.CodesMetaBaseUrl.ToString();
         SelectedLanguage = _originalConfiguration.Language;
         SelectedTheme = _originalConfiguration.Theme;
@@ -85,6 +92,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             config.CheckForCodeUpdates = CheckForCodeUpdates;
             config.CheckForFwUpdates = CheckForFwUpdates;
             config.ShowTimestamps = ShowTimestamps;
+            config.DescriptionDisplayMode = SelectedDescriptionDisplayMode;
             config.CodesMetaBaseUrl = new Uri(CodesMetaBaseUrl);
             config.Language = SelectedLanguage;
             config.Theme = SelectedTheme;

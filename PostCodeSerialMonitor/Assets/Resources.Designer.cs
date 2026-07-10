@@ -571,9 +571,31 @@ namespace PostCodeSerialMonitor.Assets {
         /// <summary>
         ///   In Views/ConfigurationDialog.axaml
         /// </summary>
-        public static string ShowTimestamps {
-            get {
+        public static string ShowTimestamps
+        {
+            get
+            {
                 return ResourceManager.GetString("ShowTimestamps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string DescriptionDisplaySettings
+        {
+            get
+            {
+                return ResourceManager.GetString("DescriptionDisplaySettings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In Views/MainWindow.axaml
+        /// </summary>
+        public static string TimestampLabel {
+            get {
+                return ResourceManager.GetString("TimestampLabel", resourceCulture);
             }
         }
 

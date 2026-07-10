@@ -15,6 +15,9 @@ public class AppConfiguration
     public bool ShowTimestamps { get; set; } = false;
 
     [Required]
+    public string DescriptionDisplayMode { get; set; } = "NewLine";
+
+    [Required]
     public string Theme { get; set; } = "Dark";
 
     [Required]
