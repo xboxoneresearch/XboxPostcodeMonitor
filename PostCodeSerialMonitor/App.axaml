@@ -37,7 +37,7 @@
         <FluentTheme />
         <Style Selector="Window">
             <Setter Property="TransparencyLevelHint" Value="AcrylicBlur" />
-            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
         <Style Selector="SelectableTextBlock">

@@ -11,6 +11,7 @@
         Width="480" Height="620"
         WindowStartupLocation="CenterOwner">
 
+    <Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="1">
     <Grid RowDefinitions="*,Auto" Margin="10">
         <ScrollViewer Grid.Row="0">
             <StackPanel Spacing="10">
@@ -42,4 +43,5 @@
             <Button Content="{x:Static assets:Resources.Close}" Command="{Binding CloseCommand}" CommandParameter="{Binding $parent[Window]}"/>
         </StackPanel>
     </Grid>
+    </Border>
 </Window>

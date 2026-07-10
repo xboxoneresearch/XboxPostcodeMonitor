@@ -11,6 +11,7 @@
         Width="400" Height="600"
         WindowStartupLocation="CenterOwner">
 
+    <Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="1">
     <Grid RowDefinitions="*,Auto" Margin="10">
         <ScrollViewer Grid.Row="0">
             <StackPanel Spacing="10">
@@ -51,4 +52,5 @@
             <Button Content="{x:Static assets:Resources.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding $parent[Window]}"/>
         </StackPanel>
     </Grid>
+    </Border>
 </Window>
