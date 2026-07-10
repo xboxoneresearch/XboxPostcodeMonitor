@@ -16,7 +16,6 @@
     <Window.Resources>
         <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converters:BooleanToTextConverter x:Key="BooleanToTextConverter" />
-        <converters:SeverityToColorConverter x:Key="SeverityToColorConverter" />
         <converters:NullFontSizeConverter x:Key="NullFontSizeConverter"/>
     </Window.Resources>
 
@@ -168,39 +167,32 @@
                                 <StackPanel>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                 <SelectableTextBlock Text="{Binding TimestampText}"
+                                         Classes.severity-warning="{Binding IsWarning}"
+                                         Classes.severity-error="{Binding IsError}"
                                          IsVisible="{Binding $parent[ItemsRepeater].DataContext.ShowTimestamps}"
                                          FontFamily="Consolas"
                                          FontSize="16"
                                          Padding="0"
                                          Opacity="0.7"
-                                         VerticalAlignment="Top">
-                                    <SelectableTextBlock.Styles>
-                                        <Style Selector="SelectableTextBlock">
-                                            <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
-                                        </Style>
-                                    </SelectableTextBlock.Styles>
-                                </SelectableTextBlock>
+                                         VerticalAlignment="Top"/>
                                 <SelectableTextBlock Text="{Binding CodeText}"
+                                         Classes.severity-warning="{Binding IsWarning}"
+                                         Classes.severity-error="{Binding IsError}"
                                          FontFamily="Consolas"
                                          FontSize="16"
                                          Padding="0"
                                          VerticalAlignment="Top"
-                                         TextWrapping="Wrap">
-                                    <SelectableTextBlock.Styles>
-                                        <Style Selector="SelectableTextBlock">
-                                            <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
-                                        </Style>
-                                    </SelectableTextBlock.Styles>
-                                </SelectableTextBlock>
+                                         TextWrapping="Wrap"/>
                                 </StackPanel>
-                                <SelectableTextBlock Text="{Binding Description}" 
+                                <SelectableTextBlock Text="{Binding Description}"
+                                         Classes.severity-warning="{Binding IsWarning}"
+                                         Classes.severity-error="{Binding IsError}"
                                          FontFamily="Consolas"
                                          Padding="0"
                                          VerticalAlignment="Top"
                                          TextWrapping="Wrap">
                                     <SelectableTextBlock.Styles>
                                         <Style Selector="SelectableTextBlock">
-                                            <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
                                             <Setter Property="FontSize" Value="{Binding Description, Converter={StaticResource NullFontSizeConverter}, ConverterParameter=14}"/>
                                         </Style>
                                     </SelectableTextBlock.Styles>

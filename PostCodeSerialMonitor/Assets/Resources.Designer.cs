@@ -493,7 +493,18 @@ namespace PostCodeSerialMonitor.Assets {
                 return ResourceManager.GetString("LanguageSettings", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   In Views/ConfigurationDialog.axaml
+        /// </summary>
+        public static string ThemeSettings
+        {
+            get
+            {
+                return ResourceManager.GetString("ThemeSettings", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   In Views/ConfigurationDialog.axaml
         /// </summary>

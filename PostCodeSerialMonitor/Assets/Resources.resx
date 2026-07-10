@@ -309,6 +309,10 @@
     <value>Language Settings</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>
   </data>
+  <data name="ThemeSettings" xml:space="preserve">
+    <value>Theme</value>
+    <comment>In Views/ConfigurationDialog.axaml</comment>
+  </data>
   <data name="UpdateSettings" xml:space="preserve">
     <value>Update Settings</value>
     <comment>In Views/ConfigurationDialog.axaml</comment>

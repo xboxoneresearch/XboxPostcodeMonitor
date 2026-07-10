@@ -15,6 +15,9 @@ public class AppConfiguration
     public bool ShowTimestamps { get; set; } = false;
 
     [Required]
+    public string Theme { get; set; } = "Dark";
+
+    [Required]
     [Url]
     public Uri CodesMetaBaseUrl { get; set; } = new Uri("https://errors.xboxresearch.com");
 

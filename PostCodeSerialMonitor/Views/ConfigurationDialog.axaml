@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="clr-namespace:PostCodeSerialMonitor.Assets"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="600"
         x:Class="PostCodeSerialMonitor.Views.ConfigurationDialog"
         x:DataType="vm:ConfigurationDialogViewModel"
         Title="{x:Static assets:Resources.Configuration}"
-        Width="400" Height="450"
+        Width="400" Height="600"
         WindowStartupLocation="CenterOwner">
 
     <Grid RowDefinitions="*,Auto" Margin="10">
@@ -18,6 +18,11 @@
                 <ComboBox Width="150"
                         ItemsSource="{Binding Languages}"
                         SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+
+                <TextBlock Text="{x:Static assets:Resources.ThemeSettings}" FontWeight="Bold" Margin="0,0,0,5"/>
+                <ComboBox Width="150"
+                        ItemsSource="{Binding Themes}"
+                        SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"/>
 
                 <TextBlock Text="{x:Static assets:Resources.UpdateSettings}" FontWeight="Bold" Margin="0,0,0,5"/>
 

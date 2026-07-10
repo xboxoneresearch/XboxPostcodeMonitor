@@ -5,6 +5,7 @@ using PostCodeSerialMonitor.Models;
 using PostCodeSerialMonitor.Services;
 using PostCodeSerialMonitor.Utils;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,12 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     [ObservableProperty]
     private string selectedLanguage;
 
+    [ObservableProperty]
+    private ObservableCollection<string> themes = new(["Dark", "Light", "System"]);
+
+    [ObservableProperty]
+    private string selectedTheme;
+
     public static ObservableCollection<string> GetAvailableLanguages()
     {
         var languages = new ObservableCollection<string>();
@@ -61,6 +68,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         ShowTimestamps = _originalConfiguration.ShowTimestamps;
         CodesMetaBaseUrl = _originalConfiguration.CodesMetaBaseUrl.ToString();
         SelectedLanguage = _originalConfiguration.Language;
+        SelectedTheme = _originalConfiguration.Theme;
 
         //Add available languages
         Languages = GetAvailableLanguages();
@@ -79,7 +87,10 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             config.ShowTimestamps = ShowTimestamps;
             config.CodesMetaBaseUrl = new Uri(CodesMetaBaseUrl);
             config.Language = SelectedLanguage;
+            config.Theme = SelectedTheme;
         });
+
+        Application.Current!.RequestedThemeVariant = App.ThemeVariantFromName(SelectedTheme);
 
         window.Close();
 

@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using PostCodeSerialMonitor.ViewModels;
 using PostCodeSerialMonitor.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,13 @@ namespace PostCodeSerialMonitor;
 
 public partial class App : Application
 {
+    public static ThemeVariant ThemeVariantFromName(string name) => name switch
+    {
+        "Light" => ThemeVariant.Light,
+        "Dark" => ThemeVariant.Dark,
+        _ => ThemeVariant.Default,
+    };
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -36,6 +44,7 @@ public partial class App : Application
 
         // Load language setting in config.json.
         Assets.Resources.Culture = new CultureInfo(configService.Config.Language);
+        RequestedThemeVariant = ThemeVariantFromName(configService.Config.Theme);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
