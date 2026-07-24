@@ -11,7 +11,7 @@ To be used with [PicoDurangoPOST](https://github.com/xboxoneresearch/PicoDurango
 Error codes are synced from [errors.xboxresearch.com](https://errors.xboxresearch.com)
 
 > [!IMPORTANT]
-> You have to use at least fw v0.2.3 of `PicoDurangoPOST`
+> You have to use at least fw v0.4.0 of `PicoDurangoPOST`
 
 ## Features
 
