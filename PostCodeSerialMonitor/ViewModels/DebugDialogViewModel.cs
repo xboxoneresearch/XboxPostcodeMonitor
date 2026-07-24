@@ -54,7 +54,7 @@ public partial class DebugDialogViewModel : ViewModelBase
     {
         for (int i = 0; i < (int)EntryCount; i++)
         {
-            var code = i * 0x11;
+            var code = (UInt64)(i * 0x11);
             var segment = i % 4;
             var flavor = CodeFlavors[i % CodeFlavors.Count];
 
@@ -65,7 +65,6 @@ public partial class DebugDialogViewModel : ViewModelBase
                 DecodedCode = new DecodedCode
                 {
                     Flavor = flavor,
-                    Index = segment,
                     Code = code,
                     SeverityLevel = (CodeSeverity)(i % 3),
                     Name = $"DEBUG_CODE_{i}",
@@ -80,13 +79,13 @@ public partial class DebugDialogViewModel : ViewModelBase
     [RelayCommand]
     private async Task DecodeStandaloneAsync()
     {
-        int code;
+        UInt64 code;
         try
         {
             var hex = CodeInput.Trim();
             if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
                 hex = hex[2..];
-            code = Convert.ToInt32(hex, 16) & 0xFFFF;
+            code = Convert.ToUInt64(hex, 16);
         }
         catch (Exception)
         {

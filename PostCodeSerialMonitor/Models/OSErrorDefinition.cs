@@ -1,3 +1,4 @@
+using System;
 using CsvHelper.Configuration.Attributes;
 
 namespace PostCodeSerialMonitor.Models;
@@ -13,7 +14,7 @@ public class OSErrorDefinition
     public CodeFlavor CodeFlavor { get; set; } = CodeFlavor.UNKNOWN;
 
     [TypeConverter(typeof(HexNumberConverter))]
-    public uint Code { get; set; }
+    public UInt64 Code { get; set; }
 
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;

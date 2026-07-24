@@ -31,7 +31,6 @@ public class LogEntry : INotifyPropertyChanged
     public string CodeText => FormatCodeText();
     // Individual fields, for column-aligned display
     public string FlavorText => DecodedCode.Flavor.ToString();
-    public string IndexText => $"({DecodedCode.Index}):";
     public string CodeHexText => $"{DecodedCode.Code:X4}";
     public string NameText => string.IsNullOrEmpty(DecodedCode?.Name) ? string.Empty : $"[{DecodedCode.Name}]";
     // Name + description on one line, for the truncated inline preview
@@ -48,7 +47,7 @@ public class LogEntry : INotifyPropertyChanged
     private string FormatCodeText()
     {
         // Format flavor, index, and code with fixed spacing
-        var formatted = $"{DecodedCode?.Flavor,-4} ({DecodedCode?.Index}): {DecodedCode?.Code,4:X4}";
+        var formatted = $"{DecodedCode?.Flavor,-4}: {DecodedCode?.Code,4:X8}";
         if (!string.IsNullOrEmpty(DecodedCode?.Name))
             formatted += $" [{DecodedCode?.Name}]";
         return formatted;

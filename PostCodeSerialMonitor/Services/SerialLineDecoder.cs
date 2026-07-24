@@ -9,7 +9,7 @@ public class SerialLineDecoder
 {
     private readonly MetaDefinitionService _metaDefinitionService;
     private readonly ILogger<SerialLineDecoder> _logger;
-    private static readonly Regex regex = new Regex(@"^(SMC|SP|CPU|OS)\s+?\((\d)\)\s?\:\s?([x0-9a-fA-F]{6})");
+    private static readonly Regex regex = new Regex(@"^(SMC|SP|CPU|OS)\s?\:\s?([x0-9a-fA-F]{4,})\s?");
 
     public SerialLineDecoder(MetaDefinitionService metaDefinitionService, ILogger<SerialLineDecoder> logger)
     {
@@ -27,8 +27,7 @@ public class SerialLineDecoder
         }
 
         var codeFlavorStr = match.Groups[1].Value;
-        var indexStr = match.Groups[2].Value;
-        var codeStr = match.Groups[3].Value;
+        var codeStr = match.Groups[2].Value;
 
         var flavor = CodeFlavor.UNKNOWN;
         if (codeFlavorStr == "SMC")
@@ -40,23 +39,13 @@ public class SerialLineDecoder
         else if (codeFlavorStr == "OS")
             flavor = CodeFlavor.OS;
 
-        var index = int.Parse(indexStr);
-        var code = Convert.ToInt32(codeStr.Substring(2), 16);
+        var code = Convert.ToUInt64(codeStr.Substring(2), 16);
 
         var decoded = new DecodedCode()
         {
             Flavor = flavor,
-            Index = index,
             Code = code
         };
-
-        // Until we have proper names for the E errors, bail out here early.
-        if (flavor == CodeFlavor.OS && index == 1) {
-            decoded.SeverityLevel = CodeSeverity.Error;
-            decoded.Name = $"OS_ERROR_E{code}";
-            decoded.Description = Assets.Resources.UemOsError;
-            return decoded;
-        }
 
         // First: Try to find distinct code
         var postCode = _metaDefinitionService.PostCodes.FirstOrDefault(x => 
