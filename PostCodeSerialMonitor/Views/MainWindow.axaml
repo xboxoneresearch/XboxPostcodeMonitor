@@ -229,15 +229,7 @@
                                                      FontSize="16"
                                                      Margin="0,0,4,0"
                                                      VerticalAlignment="Top"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding IndexText}"
-                                                     Classes="logText"
-                                                     Classes.severity-warning="{Binding IsWarning}"
-                                                     Classes.severity-error="{Binding IsError}"
-                                                     FontFamily="Consolas,Menlo,Monospace"
-                                                     FontSize="16"
-                                                     Margin="0,0,4,0"
-                                                     VerticalAlignment="Top"/>
-                                            <TextBlock Grid.Column="3" Text="{Binding CodeHexText}"
+                                            <TextBlock Grid.Column="2" Text="{Binding CodeHexText}"
                                                      Classes="logText"
                                                      Classes.severity-warning="{Binding IsWarning}"
                                                      Classes.severity-error="{Binding IsError}"
@@ -246,7 +238,7 @@
                                                      Margin="0,0,4,0"
                                                      VerticalAlignment="Top"/>
                                             <!-- NewLine / bottom-panel mode: just the name -->
-                                            <TextBlock Grid.Column="4" Text="{Binding NameText}"
+                                            <TextBlock Grid.Column="3" Text="{Binding NameText}"
                                                      Classes="logText"
                                                      Classes.severity-warning="{Binding IsWarning}"
                                                      Classes.severity-error="{Binding IsError}"
@@ -256,7 +248,7 @@
                                                      VerticalAlignment="Top"
                                                      TextWrapping="Wrap"/>
                                             <!-- Inline mode: name + description, truncated with an ellipsis until expanded -->
-                                            <TextBlock Grid.Column="4" Text="{Binding InlinePreviewText}"
+                                            <TextBlock Grid.Column="3" Text="{Binding InlinePreviewText}"
                                                      Classes="logText"
                                                      Classes.severity-warning="{Binding IsWarning}"
                                                      Classes.severity-error="{Binding IsError}"

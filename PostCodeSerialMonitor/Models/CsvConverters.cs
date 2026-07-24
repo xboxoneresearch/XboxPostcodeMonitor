@@ -12,7 +12,7 @@ public class HexNumberConverter : DefaultTypeConverter
         if (text == null || text == "")
             return null;
 
-        return Convert.ToUInt32(text, 16);
+        return Convert.ToUInt64(text, 16);
     }
 
     public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
@@ -20,7 +20,7 @@ public class HexNumberConverter : DefaultTypeConverter
         if (value == null)
             return null;
 
-        return $"0x{value:X4}";
+        return $"0x{value:X8}";
     }
 }
 

@@ -13,14 +13,20 @@ public class TestDataGenerator : IEnumerable<object[]>
 {
     private readonly List<object[]> _data = new List<object[]>
     {
-        new object[] {"CPU (1): 0x14ff [2BL_FINAL_SUCCESS] (6683 ms)", new DecodedCode(){
+        new object[] {"CPU: 0x14ff (+0.000 mS)", new DecodedCode(){
             Flavor = CodeFlavor.CPU,
-            Index = 1,
             Code = 0x14ff
         }},
-        new object[] {"SP  (1): 0x0075 [BOOT_SUCCESS] (2423 ms)", new DecodedCode(){
+        new object[] {"CPU: 0x14ff", new DecodedCode(){
+            Flavor = CodeFlavor.CPU,
+            Code = 0x14ff
+        }},
+        new object[] {"SP : 0x75 (+4252.064 mS)", new DecodedCode(){
             Flavor = CodeFlavor.SP,
-            Index = 1,
+            Code = 0x0075
+        }},
+        new object[] {"SP : 0x75", new DecodedCode(){
+            Flavor = CodeFlavor.SP,
             Code = 0x0075
         }}
     };
@@ -86,7 +92,6 @@ public class SerialDecoderTests
         var result = _decoder.DecodeLine(input, ConsoleType.XboxOnePhat);
         Assert.NotNull(result);
         Assert.Equal(expected.Flavor, result.Flavor);
-        Assert.Equal(expected.Index, result.Index);
         Assert.Equal(expected.Code, result.Code);
     }
 }
