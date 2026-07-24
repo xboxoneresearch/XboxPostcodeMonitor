@@ -19,6 +19,7 @@ public class MetaUpdateService
     private readonly HttpClient _httpClient;
     private readonly ILogger<MetaUpdateService> _logger;
     private const string META_FILENAME = "meta.json";
+    private const int SUPPORTED_META_FORMAT_VERSION = 2;
     private MetaDefinition? _currentMeta;
 
     public string LocalMetaPath => Path.Combine(_localPath, META_FILENAME);
@@ -130,6 +131,9 @@ public class MetaUpdateService
         {
             var json = await File.ReadAllTextAsync(LocalMetaPath);
             var res = JsonSerializer.Deserialize<MetaDefinition>(json, _jsonSerializeOptions);
+            if (res != null && !IsSupportedFormatVersion(res))
+                return null;
+
             _currentMeta = res;
             return res;
         }
@@ -148,12 +152,24 @@ public class MetaUpdateService
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<MetaDefinition>(json, _jsonSerializeOptions);
+            var res = JsonSerializer.Deserialize<MetaDefinition>(json, _jsonSerializeOptions);
+            return res != null && !IsSupportedFormatVersion(res) ? null : res;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, Assets.Resources.FailedDownloadMetaDefinition, Config.MetaJsonUrl);
             return null;
         }
+    }
+
+    private bool IsSupportedFormatVersion(MetaDefinition meta)
+    {
+        if (meta.FormatVersion == SUPPORTED_META_FORMAT_VERSION)
+            return true;
+
+        _logger.LogError(
+            "Metadata format version {ActualVersion} is not supported (expected {ExpectedVersion}). Please update the metadata.",
+            meta.FormatVersion, SUPPORTED_META_FORMAT_VERSION);
+        return false;
     }
 }
