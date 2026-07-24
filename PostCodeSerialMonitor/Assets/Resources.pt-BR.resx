@@ -190,7 +190,7 @@
     <comment>In Services/SerialService.cs</comment>
   </data>
   <data name="FailedFwVersion" xml:space="preserve">
-    <value>Falha ao processar a informação sobre a versão. Você está usando o firwmare v0.2.3 ou superior?</value>
+    <value>Falha na verificação da versão do firmware. Você está com o firmware mais recente do PicoDurangoPOST?</value>
     <comment>In Services/SerialService.cs</comment>
   </data>
   <data name="FailedParseConfig" xml:space="preserve">

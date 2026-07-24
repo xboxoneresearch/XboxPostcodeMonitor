@@ -28,6 +28,8 @@ public class SerialService : IDisposable
     public event Action? DeviceStateChanged;
     public event Action? DeviceConfigChanged;
 
+    public const string MinimumFirmwareVersion = "v0.4.0";
+
     public string FirmwareVersion { get; private set; } = string.Empty;
     public string BuildDate { get; private set; } = string.Empty;
 
@@ -167,7 +169,7 @@ public class SerialService : IDisposable
         _serialPort.WriteLine("version");
         Thread.Sleep(100);
         success = await ParseVersionInfo();
-        if (!success)
+        if (!success || new SemanticVersion(FirmwareVersion) < new SemanticVersion(MinimumFirmwareVersion))
         {
             Disconnect();
             throw new Exception(Assets.Resources.FailedFwVersion);

@@ -190,7 +190,7 @@
     <comment>In Services/SerialService.cs</comment>
   </data>
   <data name="FailedFwVersion" xml:space="preserve">
-    <value>Failed to parse version information. Are you on FW v0.2.3 or greater?</value>
+    <value>Firmware version check failed. Are you on latest PicoDurangoPOST FW?</value>
     <comment>In Services/SerialService.cs</comment>
   </data>
   <data name="FailedParseConfig" xml:space="preserve">
